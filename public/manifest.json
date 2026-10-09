@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "ChatGPT Layout+",
+  "short_name": "Layout+",
+  "description": "Customizable ChatGPT layout: message width, composer width, typography and developer-friendly views.",
+  "permissions": ["storage"],
+  "host_permissions": [],
+  "action": {"default_title": "ChatGPT Layout+", "default_popup": "popup.html"},
+  "content_scripts": [{
+    "matches": ["https://chatgpt.com/*"],
+    "js": ["content.js"],
+    "run_at": "document_idle"
+  }]
+}
