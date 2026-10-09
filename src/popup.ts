@@ -13,7 +13,11 @@ function paint(): void {
   input('expandTables').checked = settings.expandTables;
   document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => {
     button.classList.toggle('active', button.dataset.preset === settings.preset);
+    button.setAttribute('aria-pressed', String(button.dataset.preset === settings.preset));
   });
+  document.body.classList.toggle('is-off', !settings.enabled);
+  const note = document.getElementById('presetNote');
+  if (note) note.hidden = settings.preset !== 'custom';
 }
 function update(next: Settings): void {
   settings = normalizeSettings(next);
@@ -22,7 +26,7 @@ function update(next: Settings): void {
   const snapshot = {...settings};
   writeQueue = writeQueue.catch(() => {}).then(async () => {
     await chrome.storage.sync.set({[SETTINGS_KEY]: snapshot});
-    label('status').textContent = 'Salvo automaticamente';
+    label('status').textContent = 'Salvo';
   }).catch(() => { label('status').textContent = 'Erro ao salvar'; });
 }
 for (const field of ['conversationWidth','composerWidth','fontSize'] as const) {
@@ -38,6 +42,12 @@ document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => 
   });
 });
 label('reset').addEventListener('click', () => update({...DEFAULT_SETTINGS}));
-chrome.storage.sync.get(SETTINGS_KEY)
-  .then(result => { settings = normalizeSettings(result[SETTINGS_KEY]); paint(); })
-  .catch(() => { settings = DEFAULT_SETTINGS; paint(); label('status').textContent = 'Armazenamento indisponível'; });
+const storage = globalThis.chrome?.storage?.sync;
+if (storage) {
+  storage.get(SETTINGS_KEY)
+    .then(result => { settings = normalizeSettings(result[SETTINGS_KEY]); paint(); })
+    .catch(() => { settings = DEFAULT_SETTINGS; paint(); label('status').textContent = 'Armazenamento indisponível'; });
+} else {
+  paint();
+  label('status').textContent = 'Armazenamento indisponível';
+}
