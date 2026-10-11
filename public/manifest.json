@@ -2,10 +2,22 @@
   "manifest_version": 3,
   "name": "ChatGPT Layout+",
   "short_name": "Layout+",
-  "description": "Customizable ChatGPT layout: message width, composer width, typography and developer-friendly views.",
+  "description": "Deixe o ChatGPT mais largo: conversa, prompt, texto, código e tabelas.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
   "permissions": ["storage"],
   "host_permissions": [],
-  "action": {"default_title": "ChatGPT Layout+", "default_popup": "popup.html"},
+  "action": {
+    "default_title": "ChatGPT Layout+",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png"
+    }
+  },
   "content_scripts": [{
     "matches": ["https://chatgpt.com/*"],
     "js": ["content.js"],

@@ -1,10 +1,10 @@
-import {readdirSync, readFileSync} from 'node:fs';
+import {existsSync, readdirSync, readFileSync} from 'node:fs';
 import {dirname, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = resolve(root, 'dist');
-const expected = ['content.js', 'manifest.json', 'popup.css', 'popup.html', 'popup.js'];
+const expected = ['content.js', 'icons', 'manifest.json', 'popup.css', 'popup.html', 'popup.js'];
 const actual = readdirSync(dist).sort();
 const errors = [];
 
@@ -22,6 +22,10 @@ if (JSON.stringify(manifest.permissions) !== JSON.stringify(['storage'])) errors
 if (JSON.stringify(manifest.host_permissions) !== JSON.stringify([])) errors.push('host_permissions must be []');
 if (JSON.stringify(manifest.content_scripts?.[0]?.matches) !== JSON.stringify(['https://chatgpt.com/*'])) {
   errors.push('content script matches must be ["https://chatgpt.com/*"]');
+}
+for (const size of [16, 48, 128]) {
+  if (manifest.icons?.[String(size)] !== `icons/icon${size}.png`) errors.push(`missing icons.${size}`);
+  if (!existsSync(resolve(dist, 'icons', `icon${size}.png`))) errors.push(`missing icons/icon${size}.png`);
 }
 
 if (errors.length) {

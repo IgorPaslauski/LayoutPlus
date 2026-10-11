@@ -14,6 +14,7 @@ test('manifest limits permissions and origins', () => {
   assert.equal(manifest.manifest_version,3);
   assert.deepEqual(manifest.permissions,['storage']);
   assert.deepEqual(manifest.content_scripts[0].matches,['https://chatgpt.com/*']);
+  assert.equal(manifest.icons['128'], 'icons/icon128.png');
 });
 test('popup ids match controls', () => {
   const html=read('public/popup.html');
