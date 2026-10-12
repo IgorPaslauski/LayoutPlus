@@ -19,7 +19,7 @@ test('manifest limits permissions and origins', () => {
 });
 test('popup ids match controls', () => {
   const html=read('public/popup.html');
-  for(const id of ['enabled','conversationWidth','textWidth','composerWidth','fontSize','lineHeight','paragraphGap','fontChoice','focusLatest','expandCode','expandTables','breakout','reset','status']) {
+  for(const id of ['enabled','conversationWidth','textWidth','composerWidth','fontSize','lineHeight','paragraphGap','fontChoice','focusLatest','codeFontSize','codeLineHeight','codeMaxHeight','codeWrap','expandCode','expandTables','breakout','reset','status']) {
     assert.ok(html.includes(`id="${id}"`), `Missing ${id}`);
   }
 });
@@ -133,6 +133,19 @@ test('reading preset uses measure, spacing and a system font', async () => {
   assert.match(content, /data-layout-plus-earlier/);
   assert.ok(!content.includes('fonts.googleapis'));
   assert.ok(!content.includes('fetch('));
+});
+
+test('code preset sets its own type and a height cap', async () => {
+  const {normalizeSettings, PRESETS} = await loadSource('../src/settings.ts');
+  const developer = normalizeSettings({...PRESETS.developer, preset: 'developer', enabled: true});
+  assert.equal(developer.codeFontSize, 14);
+  assert.equal(developer.codeMaxHeight, 480);
+  assert.equal(developer.breakout, true);
+  assert.equal(developer.textWidth, 72);
+  assert.equal(normalizeSettings({codeMaxHeight: 40}).codeMaxHeight, 160);
+  assert.equal(normalizeSettings({codeMaxHeight: 0}).codeMaxHeight, 0);
+  assert.match(read('src/content.ts'), /--layout-plus-code-font/);
+  assert.ok(!read('src/content.ts').includes('counter-increment'));
 });
 
 test('CSS has balanced braces', () => {

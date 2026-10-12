@@ -12,6 +12,10 @@ export interface Settings {
   paragraphGap: number;
   fontChoice: FontChoice;
   focusLatest: boolean;
+  codeFontSize: number;
+  codeLineHeight: number;
+  codeWrap: boolean;
+  codeMaxHeight: number;
   expandCode: boolean;
   expandTables: boolean;
   breakout: boolean;
@@ -27,21 +31,30 @@ export const DEFAULT_SETTINGS: Settings = {
   paragraphGap: 12,
   fontChoice: 'system',
   focusLatest: false,
+  codeFontSize: 13,
+  codeLineHeight: 15,
+  codeWrap: false,
+  codeMaxHeight: 0,
   expandCode: true,
   expandTables: true,
   breakout: false
 };
-type PresetFields = Pick<Settings, 'conversationWidth'|'textWidth'|'composerWidth'|'fontSize'|'lineHeight'|'paragraphGap'|'fontChoice'|'focusLatest'|'expandCode'|'expandTables'|'breakout'>;
+type PresetFields = Pick<Settings, 'conversationWidth'|'textWidth'|'composerWidth'|'fontSize'|'lineHeight'|'paragraphGap'|'fontChoice'|'focusLatest'|'codeFontSize'|'codeLineHeight'|'codeWrap'|'codeMaxHeight'|'expandCode'|'expandTables'|'breakout'>;
 const comfortable = {lineHeight: 16, paragraphGap: 12, fontChoice: 'system' as const, focusLatest: false};
+const codeDefaults = {codeFontSize: 13, codeLineHeight: 15, codeWrap: false, codeMaxHeight: 0};
 export const PRESETS: Record<Exclude<Preset, 'custom'>, PresetFields> = {
-  default: {conversationWidth: 768, textWidth: 68, composerWidth: 768, fontSize: 16, expandCode: false, expandTables: false, breakout: false, ...comfortable},
-  wide: {conversationWidth: 1200, textWidth: 72, composerWidth: 1000, fontSize: 16, expandCode: true, expandTables: true, breakout: false, ...comfortable},
-  developer: {conversationWidth: 1600, textWidth: 72, composerWidth: 1300, fontSize: 15, expandCode: true, expandTables: true, breakout: false, ...comfortable, lineHeight: 15},
-  reading: {conversationWidth: 840, textWidth: 66, composerWidth: 720, fontSize: 18, lineHeight: 17, paragraphGap: 16, fontChoice: 'serif', focusLatest: true, expandCode: false, expandTables: false, breakout: false}
+  default: {conversationWidth: 768, textWidth: 68, composerWidth: 768, fontSize: 16, expandCode: false, expandTables: false, breakout: false, ...comfortable, ...codeDefaults},
+  wide: {conversationWidth: 1200, textWidth: 72, composerWidth: 1000, fontSize: 16, expandCode: true, expandTables: true, breakout: false, ...comfortable, ...codeDefaults},
+  developer: {conversationWidth: 1600, textWidth: 72, composerWidth: 1300, fontSize: 15, expandCode: true, expandTables: true, breakout: true, ...comfortable, lineHeight: 15, ...codeDefaults, codeFontSize: 14, codeLineHeight: 16, codeMaxHeight: 480},
+  reading: {conversationWidth: 840, textWidth: 66, composerWidth: 720, fontSize: 18, lineHeight: 17, paragraphGap: 16, fontChoice: 'serif', focusLatest: true, expandCode: false, expandTables: false, breakout: false, ...codeDefaults}
 };
 const FONTS: FontChoice[] = ['system', 'serif', 'readable'];
 const clamp = (value: unknown, min: number, max: number, fallback: number) =>
   typeof value === 'number' && Number.isFinite(value) ? Math.round(Math.max(min, Math.min(max, value))) : fallback;
+function codeMaxHeight(value: unknown): number {
+  const next = clamp(value, 0, 800, DEFAULT_SETTINGS.codeMaxHeight);
+  return next === 0 ? 0 : Math.max(160, next);
+}
 export function normalizeSettings(input: unknown): Settings {
   const value = input && typeof input === 'object' ? input as Partial<Settings> : {};
   const preset: Preset = ['default', 'wide', 'developer', 'reading', 'custom'].includes(value.preset ?? '') ? value.preset! : DEFAULT_SETTINGS.preset;
@@ -56,6 +69,10 @@ export function normalizeSettings(input: unknown): Settings {
     paragraphGap: clamp(value.paragraphGap, 8, 28, DEFAULT_SETTINGS.paragraphGap),
     fontChoice: FONTS.includes(value.fontChoice as FontChoice) ? value.fontChoice as FontChoice : DEFAULT_SETTINGS.fontChoice,
     focusLatest: typeof value.focusLatest === 'boolean' ? value.focusLatest : DEFAULT_SETTINGS.focusLatest,
+    codeFontSize: clamp(value.codeFontSize, 11, 20, DEFAULT_SETTINGS.codeFontSize),
+    codeLineHeight: clamp(value.codeLineHeight, 12, 20, DEFAULT_SETTINGS.codeLineHeight),
+    codeWrap: typeof value.codeWrap === 'boolean' ? value.codeWrap : DEFAULT_SETTINGS.codeWrap,
+    codeMaxHeight: codeMaxHeight(value.codeMaxHeight),
     expandCode: typeof value.expandCode === 'boolean' ? value.expandCode : DEFAULT_SETTINGS.expandCode,
     expandTables: typeof value.expandTables === 'boolean' ? value.expandTables : DEFAULT_SETTINGS.expandTables,
     breakout: typeof value.breakout === 'boolean' ? value.breakout : DEFAULT_SETTINGS.breakout

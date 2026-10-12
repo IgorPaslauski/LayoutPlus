@@ -99,6 +99,26 @@
     "message": "Atenuar respostas anteriores",
     "description": "Esmaece mensagens antigas pela posição no DOM."
   },
+  "codeFontSize": {
+    "message": "Tamanho do código",
+    "description": "Tamanho da fonte dentro do bloco de código."
+  },
+  "codeLineHeight": {
+    "message": "Entrelinha do código",
+    "description": "Entrelinha dentro do bloco de código."
+  },
+  "codeMaxHeight": {
+    "message": "Altura do bloco",
+    "description": "Altura máxima do bloco de código. Zero não limita."
+  },
+  "codeMaxAuto": {
+    "message": "Auto",
+    "description": "Rótulo quando o bloco não tem limite de altura."
+  },
+  "codeWrap": {
+    "message": "Quebrar linhas do código",
+    "description": "Quebra linhas longas em vez de rolar para o lado."
+  },
   "reset": {
     "message": "Restaurar",
     "description": "Botão de restaurar."

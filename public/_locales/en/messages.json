@@ -99,6 +99,26 @@
     "message": "Dim earlier replies",
     "description": "Fade older messages by DOM position."
   },
+  "codeFontSize": {
+    "message": "Code size",
+    "description": "Font size inside code blocks."
+  },
+  "codeLineHeight": {
+    "message": "Code spacing",
+    "description": "Line height inside code blocks."
+  },
+  "codeMaxHeight": {
+    "message": "Code block height",
+    "description": "Maximum height of a code block. Zero means no cap."
+  },
+  "codeMaxAuto": {
+    "message": "Auto",
+    "description": "Label when the code block has no height cap."
+  },
+  "codeWrap": {
+    "message": "Wrap code lines",
+    "description": "Wrap long code lines instead of scrolling sideways."
+  },
   "reset": {
     "message": "Restore",
     "description": "Reset settings button."
