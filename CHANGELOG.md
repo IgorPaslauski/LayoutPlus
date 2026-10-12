@@ -3,6 +3,7 @@
 ## Unreleased
 
 - The popup, toolbar title and manifest description follow the browser language. English is the fallback and Brazilian Portuguese is included.
+- The popup says when the ChatGPT layout anchors are missing. The check looks for elements only, not conversation text.
 
 ## 0.2.2
 
