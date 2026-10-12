@@ -63,6 +63,10 @@
     "message": "Full-width tables",
     "description": "Expand tables toggle."
   },
+  "breakout": {
+    "message": "Let blocks leave the column",
+    "description": "Allow code, tables and images to escape the reading column."
+  },
   "reset": {
     "message": "Restore",
     "description": "Reset settings button."

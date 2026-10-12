@@ -26,7 +26,7 @@ Widths are capped by the current window. The saved number is unchanged, and belo
 
 The extension requests only the `storage` permission. A content script runs on `https://chatgpt.com/*`.
 
-It saves one object, `layoutPlusSettings`, in `chrome.storage.sync`: `enabled`, `preset`, `conversationWidth`, `textWidth`, `composerWidth`, `fontSize`, `expandCode` and `expandTables`. If Chrome sync is turned on, Chrome syncs those preferences to the Google account. The extension has no server of its own.
+It saves one object, `layoutPlusSettings`, in `chrome.storage.sync`: `enabled`, `preset`, `conversationWidth`, `textWidth`, `composerWidth`, `fontSize`, `expandCode`, `expandTables` and `breakout`. If Chrome sync is turned on, Chrome syncs those preferences to the Google account. The extension has no server of its own.
 
 The content script watches the page DOM (`childList` / `subtree`) and reads element geometry (`getBoundingClientRect`) so it can offset writing-block action buttons when they overlap the fixed title bar. It does not read conversation text and it does not make network requests.
 
