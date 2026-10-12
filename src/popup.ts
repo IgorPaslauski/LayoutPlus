@@ -149,6 +149,24 @@ input('importNamed').addEventListener('change', () => {
 function cleanEnough(value: string): boolean {
   return value.trim().length > 0;
 }
+const commandNames: Record<string, string> = {
+  'toggle-enabled': 'cmdToggle',
+  'cycle-preset': 'cmdCycle',
+  'toggle-presentation': 'cmdPresentation'
+};
+const getCommands = globalThis.chrome?.commands?.getAll?.bind(globalThis.chrome.commands);
+if (getCommands) {
+  getCommands().then(commands => {
+    const hint = document.getElementById('shortcutHint');
+    if (!hint) return;
+    const parts = commands.flatMap(command => {
+      const key = command.name ? commandNames[command.name] : undefined;
+      return command.shortcut && key ? [`${command.shortcut} ${t(key)}`] : [];
+    });
+    hint.hidden = parts.length === 0;
+    hint.textContent = parts.join(' · ');
+  }).catch(() => {});
+}
 const session = globalThis.chrome?.storage?.session;
 if (session) {
   session.get(RUNTIME_KEY)
