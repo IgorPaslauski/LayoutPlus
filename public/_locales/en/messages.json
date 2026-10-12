@@ -31,6 +31,10 @@
     "message": "Code",
     "description": "Developer preset button."
   },
+  "presetReading": {
+    "message": "Read",
+    "description": "Reading preset button."
+  },
   "presetCustom": {
     "message": "Manual adjustment",
     "description": "Shown when the current values do not match a preset."
@@ -66,6 +70,34 @@
   "breakout": {
     "message": "Let blocks leave the column",
     "description": "Allow code, tables and images to escape the reading column."
+  },
+  "lineHeight": {
+    "message": "Line spacing",
+    "description": "Line height slider. Stored as tenths."
+  },
+  "paragraphGap": {
+    "message": "Paragraph gap",
+    "description": "Space between paragraphs."
+  },
+  "fontChoice": {
+    "message": "Font",
+    "description": "Font family choice."
+  },
+  "fontSystem": {
+    "message": "System",
+    "description": "Keep the page font."
+  },
+  "fontSerif": {
+    "message": "Serif",
+    "description": "System serif font."
+  },
+  "fontReadable": {
+    "message": "Readable",
+    "description": "System sans font with open letterforms."
+  },
+  "focusLatest": {
+    "message": "Dim earlier replies",
+    "description": "Fade older messages by DOM position."
   },
   "reset": {
     "message": "Restore",

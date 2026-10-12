@@ -22,6 +22,12 @@ function paint(): void {
   label('fontSizeValue').textContent = `${settings.fontSize} px`;
   input('textWidth').value = String(settings.textWidth);
   label('textWidthValue').textContent = `${settings.textWidth} ch`;
+  input('lineHeight').value = String(settings.lineHeight);
+  label('lineHeightValue').textContent = (settings.lineHeight / 10).toFixed(1);
+  input('paragraphGap').value = String(settings.paragraphGap);
+  label('paragraphGapValue').textContent = `${settings.paragraphGap} px`;
+  input('fontChoice').value = settings.fontChoice;
+  input('focusLatest').checked = settings.focusLatest;
   input('expandCode').checked = settings.expandCode;
   input('expandTables').checked = settings.expandTables;
   input('breakout').checked = settings.breakout;
@@ -52,10 +58,10 @@ function update(next: Settings): void {
     label('status').textContent = t('statusSaved');
   }).catch(() => { label('status').textContent = t('statusError'); });
 }
-for (const field of ['conversationWidth','composerWidth','fontSize','textWidth'] as const) {
+for (const field of ['conversationWidth','composerWidth','fontSize','textWidth','lineHeight','paragraphGap'] as const) {
   input(field).addEventListener('input', () => update({...settings, [field]: Number(input(field).value), preset:'custom'}));
 }
-for (const field of ['enabled','expandCode','expandTables','breakout'] as const) {
+for (const field of ['enabled','expandCode','expandTables','breakout','focusLatest'] as const) {
   input(field).addEventListener('change', () => update({...settings, [field]: input(field).checked, ...(field === 'enabled' ? {} : {preset:'custom' as const})}));
 }
 document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => {
@@ -65,6 +71,7 @@ document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => 
   });
 });
 label('reset').addEventListener('click', () => update({...DEFAULT_SETTINGS}));
+input('fontChoice').addEventListener('change', () => update({...settings, fontChoice: input('fontChoice').value as Settings['fontChoice'], preset: 'custom'}));
 const session = globalThis.chrome?.storage?.session;
 if (session) {
   session.get(RUNTIME_KEY)

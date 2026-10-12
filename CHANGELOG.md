@@ -7,6 +7,7 @@
 - A width saved on a large monitor is capped to the current window. The stored number stays the same, and the popup shows the applied width when it is smaller.
 - Paragraphs keep a character measure while code, tables and images can use the wider column. The Code preset no longer stretches the paragraph to 1600 px.
 - An optional switch lets code, tables and images leave the column. It stays off by default, stays off on a narrow window, and falls back when a parent clips the block.
+- Reading controls add line spacing, paragraph gap, a system serif or open sans, and a Read preset. Earlier messages can fade by DOM order, without reading their text.
 
 ## 0.2.2
 

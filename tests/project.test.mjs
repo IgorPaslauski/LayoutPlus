@@ -19,7 +19,7 @@ test('manifest limits permissions and origins', () => {
 });
 test('popup ids match controls', () => {
   const html=read('public/popup.html');
-  for(const id of ['enabled','conversationWidth','textWidth','composerWidth','fontSize','expandCode','expandTables','breakout','reset','status']) {
+  for(const id of ['enabled','conversationWidth','textWidth','composerWidth','fontSize','lineHeight','paragraphGap','fontChoice','focusLatest','expandCode','expandTables','breakout','reset','status']) {
     assert.ok(html.includes(`id="${id}"`), `Missing ${id}`);
   }
 });
@@ -118,6 +118,21 @@ test('breakout turns off when a parent clips or the window is narrow', async () 
   const source = read('src/breakout.ts');
   assert.ok(!source.includes('textContent'));
   assert.ok(!source.includes('innerText'));
+});
+
+test('reading preset uses measure, spacing and a system font', async () => {
+  const {normalizeSettings, PRESETS} = await loadSource('../src/settings.ts');
+  const reading = normalizeSettings({...PRESETS.reading, preset: 'reading', enabled: true});
+  assert.ok(reading.lineHeight > PRESETS.developer.lineHeight);
+  assert.ok(reading.textWidth < 75);
+  assert.equal(reading.fontChoice, 'serif');
+  assert.equal(reading.focusLatest, true);
+  assert.equal(normalizeSettings({fontChoice: 'remote-font'}).fontChoice, 'system');
+  const content = read('src/content.ts');
+  assert.match(content, /data-message-author-role/);
+  assert.match(content, /data-layout-plus-earlier/);
+  assert.ok(!content.includes('fonts.googleapis'));
+  assert.ok(!content.includes('fetch('));
 });
 
 test('CSS has balanced braces', () => {
