@@ -20,6 +20,8 @@ function paint(): void {
   input('composerWidth').value = String(settings.composerWidth);
   input('fontSize').value = String(settings.fontSize);
   label('fontSizeValue').textContent = `${settings.fontSize} px`;
+  input('textWidth').value = String(settings.textWidth);
+  label('textWidthValue').textContent = `${settings.textWidth} ch`;
   input('expandCode').checked = settings.expandCode;
   input('expandTables').checked = settings.expandTables;
   document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => {
@@ -49,7 +51,7 @@ function update(next: Settings): void {
     label('status').textContent = t('statusSaved');
   }).catch(() => { label('status').textContent = t('statusError'); });
 }
-for (const field of ['conversationWidth','composerWidth','fontSize'] as const) {
+for (const field of ['conversationWidth','composerWidth','fontSize','textWidth'] as const) {
   input(field).addEventListener('input', () => update({...settings, [field]: Number(input(field).value), preset:'custom'}));
 }
 for (const field of ['enabled','expandCode','expandTables'] as const) {

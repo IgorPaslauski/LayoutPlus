@@ -32,7 +32,7 @@
   }
 }
 * { box-sizing: border-box; }
-body { margin: 0; width: 320px; }
+body { margin: 0; width: 320px; max-height: 640px; overflow: auto; }
 header {
   display: flex;
   align-items: center;

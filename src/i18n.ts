@@ -12,6 +12,7 @@ export const ENGLISH: Record<string, string> = {
   conversation: 'Conversation',
   composer: 'Prompt',
   fontSize: 'Text',
+  textWidth: 'Column',
   expandCode: 'Full-width code',
   expandTables: 'Full-width tables',
   reset: 'Restore',

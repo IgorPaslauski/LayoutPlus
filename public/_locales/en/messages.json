@@ -51,6 +51,10 @@
     "message": "Text",
     "description": "Reply font size slider."
   },
+  "textWidth": {
+    "message": "Column",
+    "description": "Reading column width in characters."
+  },
   "expandCode": {
     "message": "Full-width code",
     "description": "Expand code blocks toggle."

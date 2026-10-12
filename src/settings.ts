@@ -4,6 +4,7 @@ export interface Settings {
   enabled: boolean;
   preset: Preset;
   conversationWidth: number;
+  textWidth: number;
   composerWidth: number;
   fontSize: number;
   expandCode: boolean;
@@ -13,15 +14,17 @@ export const DEFAULT_SETTINGS: Settings = {
   enabled: true,
   preset: 'wide',
   conversationWidth: 1200,
+  textWidth: 72,
   composerWidth: 1000,
   fontSize: 16,
   expandCode: true,
   expandTables: true
 };
-export const PRESETS: Record<Exclude<Preset, 'custom'>, Pick<Settings, 'conversationWidth'|'composerWidth'|'fontSize'|'expandCode'|'expandTables'>> = {
-  default: {conversationWidth: 768, composerWidth: 768, fontSize: 16, expandCode: false, expandTables: false},
-  wide: {conversationWidth: 1200, composerWidth: 1000, fontSize: 16, expandCode: true, expandTables: true},
-  developer: {conversationWidth: 1600, composerWidth: 1300, fontSize: 15, expandCode: true, expandTables: true}
+type PresetFields = Pick<Settings, 'conversationWidth'|'textWidth'|'composerWidth'|'fontSize'|'expandCode'|'expandTables'>;
+export const PRESETS: Record<Exclude<Preset, 'custom'>, PresetFields> = {
+  default: {conversationWidth: 768, textWidth: 68, composerWidth: 768, fontSize: 16, expandCode: false, expandTables: false},
+  wide: {conversationWidth: 1200, textWidth: 72, composerWidth: 1000, fontSize: 16, expandCode: true, expandTables: true},
+  developer: {conversationWidth: 1600, textWidth: 72, composerWidth: 1300, fontSize: 15, expandCode: true, expandTables: true}
 };
 const clamp = (value: unknown, min: number, max: number, fallback: number) =>
   typeof value === 'number' && Number.isFinite(value) ? Math.round(Math.max(min, Math.min(max, value))) : fallback;
@@ -31,8 +34,9 @@ export function normalizeSettings(input: unknown): Settings {
   return {
     enabled: typeof value.enabled === 'boolean' ? value.enabled : DEFAULT_SETTINGS.enabled,
     preset,
-    conversationWidth: clamp(value.conversationWidth, 640, 2000, DEFAULT_SETTINGS.conversationWidth),
-    composerWidth: clamp(value.composerWidth, 640, 2000, DEFAULT_SETTINGS.composerWidth),
+    conversationWidth: clamp(value.conversationWidth, 480, 2000, DEFAULT_SETTINGS.conversationWidth),
+    textWidth: clamp(value.textWidth, 50, 85, DEFAULT_SETTINGS.textWidth),
+    composerWidth: clamp(value.composerWidth, 480, 2000, DEFAULT_SETTINGS.composerWidth),
     fontSize: clamp(value.fontSize, 12, 22, DEFAULT_SETTINGS.fontSize),
     expandCode: typeof value.expandCode === 'boolean' ? value.expandCode : DEFAULT_SETTINGS.expandCode,
     expandTables: typeof value.expandTables === 'boolean' ? value.expandTables : DEFAULT_SETTINGS.expandTables
