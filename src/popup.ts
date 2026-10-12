@@ -1,6 +1,6 @@
 import {applyStaticCopy, t} from './i18n';
 import {RUNTIME_KEY, type PageReport} from './page';
-import {appliedWidth, DEFAULT_SETTINGS, SETTINGS_KEY, PRESETS, applyPreset, normalizeSettings, type Settings} from './settings';
+import {appliedWidth, DEFAULT_SETTINGS, SETTINGS_KEY, PRESETS, applyPreset, togglePresentation, normalizeSettings, type Settings} from './settings';
 applyStaticCopy();
 let settings = DEFAULT_SETTINGS;
 let viewport = 0;
@@ -84,7 +84,8 @@ for (const field of ['enabled','expandCode','expandTables','expandMedia','breako
 document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => {
   button.addEventListener('click', () => {
     const preset = button.dataset.preset as keyof typeof PRESETS;
-    if (preset in PRESETS) update(applyPreset(settings, preset));
+    if (preset === 'presentation') update(togglePresentation(settings));
+    else if (preset in PRESETS) update(applyPreset(settings, preset));
   });
 });
 label('reset').addEventListener('click', () => update({...DEFAULT_SETTINGS}));

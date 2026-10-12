@@ -12,6 +12,7 @@
 - Tables keep a sticky header and first column, scroll sideways inside the table, and stripe rows. Images and diagrams have their own switch.
 - The prompt can grow to a minimum height and scroll inside a maximum. Native height restores only those two values.
 - The sidebar can be narrowed or collapsed, and a narrow window leaves it alone. Turning the extension off removes the override.
+- Present is one preset: larger type, a short centered column and a collapsed sidebar. Pressing it again returns to the previous preset. The composer stays, and upgrade controls are not hidden.
 
 ## 0.2.2
 

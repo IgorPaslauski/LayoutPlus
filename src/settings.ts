@@ -1,9 +1,11 @@
 export const SETTINGS_KEY = 'layoutPlusSettings';
-export type Preset = 'default' | 'wide' | 'developer' | 'reading' | 'custom';
+export type ReturnPreset = 'default' | 'wide' | 'developer' | 'reading';
+export type Preset = ReturnPreset | 'presentation' | 'custom';
 export type FontChoice = 'system' | 'serif' | 'readable';
 export interface Settings {
   enabled: boolean;
   preset: Preset;
+  previousPreset: ReturnPreset;
   conversationWidth: number;
   textWidth: number;
   composerWidth: number;
@@ -28,6 +30,7 @@ export interface Settings {
 export const DEFAULT_SETTINGS: Settings = {
   enabled: true,
   preset: 'wide',
+  previousPreset: 'wide',
   conversationWidth: 1200,
   textWidth: 72,
   composerWidth: 1000,
@@ -58,8 +61,11 @@ export const PRESETS: Record<Exclude<Preset, 'custom'>, PresetFields> = {
   default: {conversationWidth: 768, textWidth: 68, composerWidth: 768, fontSize: 16, expandCode: false, expandTables: false, expandMedia: false, breakout: false, ...comfortable, ...codeDefaults, ...heights, ...sidebar},
   wide: {conversationWidth: 1200, textWidth: 72, composerWidth: 1000, fontSize: 16, expandCode: true, expandTables: true, expandMedia: true, breakout: false, ...comfortable, ...codeDefaults, ...heights, ...sidebar},
   developer: {conversationWidth: 1600, textWidth: 72, composerWidth: 1300, fontSize: 15, expandCode: true, expandTables: true, expandMedia: true, breakout: true, ...comfortable, lineHeight: 15, ...codeDefaults, codeFontSize: 14, codeLineHeight: 16, codeMaxHeight: 480, ...heights, composerMinHeight: 120, composerMaxHeight: 320, ...sidebar},
-  reading: {conversationWidth: 840, textWidth: 66, composerWidth: 720, fontSize: 18, lineHeight: 17, paragraphGap: 16, fontChoice: 'serif', focusLatest: true, expandCode: false, expandTables: false, expandMedia: false, breakout: false, ...codeDefaults, ...heights, composerMaxHeight: 160, ...sidebar}
+  reading: {conversationWidth: 840, textWidth: 66, composerWidth: 720, fontSize: 18, lineHeight: 17, paragraphGap: 16, fontChoice: 'serif', focusLatest: true, expandCode: false, expandTables: false, expandMedia: false, breakout: false, ...codeDefaults, ...heights, composerMaxHeight: 160, ...sidebar},
+  presentation: {conversationWidth: 880, textWidth: 62, composerWidth: 760, fontSize: 24, lineHeight: 17, paragraphGap: 18, fontChoice: 'serif', focusLatest: false, expandCode: false, expandTables: false, expandMedia: true, breakout: false, ...codeDefaults, ...heights, composerMaxHeight: 200, sidebarAdjust: true, sidebarWidth: 0}
 };
+const RETURN_PRESETS: ReturnPreset[] = ['default', 'wide', 'developer', 'reading'];
+const PRESET_NAMES: Preset[] = [...RETURN_PRESETS, 'presentation', 'custom'];
 const FONTS: FontChoice[] = ['system', 'serif', 'readable'];
 const clamp = (value: unknown, min: number, max: number, fallback: number) =>
   typeof value === 'number' && Number.isFinite(value) ? Math.round(Math.max(min, Math.min(max, value))) : fallback;
@@ -69,16 +75,18 @@ function codeMaxHeight(value: unknown): number {
 }
 export function normalizeSettings(input: unknown): Settings {
   const value = input && typeof input === 'object' ? input as Partial<Settings> : {};
-  const preset: Preset = ['default', 'wide', 'developer', 'reading', 'custom'].includes(value.preset ?? '') ? value.preset! : DEFAULT_SETTINGS.preset;
+  const preset: Preset = PRESET_NAMES.includes(value.preset as Preset) ? value.preset as Preset : DEFAULT_SETTINGS.preset;
+  const previousPreset: ReturnPreset = RETURN_PRESETS.includes(value.previousPreset as ReturnPreset) ? value.previousPreset as ReturnPreset : DEFAULT_SETTINGS.previousPreset;
   return {
     enabled: typeof value.enabled === 'boolean' ? value.enabled : DEFAULT_SETTINGS.enabled,
     preset,
+    previousPreset,
     conversationWidth: clamp(value.conversationWidth, 480, 2000, DEFAULT_SETTINGS.conversationWidth),
     textWidth: clamp(value.textWidth, 50, 85, DEFAULT_SETTINGS.textWidth),
     composerWidth: clamp(value.composerWidth, 480, 2000, DEFAULT_SETTINGS.composerWidth),
     composerMinHeight: clamp(value.composerMinHeight, 0, 320, DEFAULT_SETTINGS.composerMinHeight),
     composerMaxHeight: clamp(value.composerMaxHeight, 0, 480, DEFAULT_SETTINGS.composerMaxHeight),
-    fontSize: clamp(value.fontSize, 12, 22, DEFAULT_SETTINGS.fontSize),
+    fontSize: clamp(value.fontSize, 12, 28, DEFAULT_SETTINGS.fontSize),
     lineHeight: clamp(value.lineHeight, 14, 20, DEFAULT_SETTINGS.lineHeight),
     paragraphGap: clamp(value.paragraphGap, 8, 28, DEFAULT_SETTINGS.paragraphGap),
     fontChoice: FONTS.includes(value.fontChoice as FontChoice) ? value.fontChoice as FontChoice : DEFAULT_SETTINGS.fontChoice,
@@ -96,7 +104,14 @@ export function normalizeSettings(input: unknown): Settings {
   };
 }
 export function applyPreset(settings: Settings, preset: Exclude<Preset, 'custom'>): Settings {
-  return { ...settings, preset, ...PRESETS[preset] };
+  const previousPreset = preset === 'presentation' && settings.preset !== 'presentation' && RETURN_PRESETS.includes(settings.preset as ReturnPreset)
+    ? settings.preset as ReturnPreset
+    : settings.previousPreset;
+  return { ...settings, preset, previousPreset, ...PRESETS[preset] };
+}
+export function togglePresentation(settings: Settings): Settings {
+  if (settings.preset === 'presentation') return applyPreset(settings, settings.previousPreset);
+  return applyPreset(settings, 'presentation');
 }
 
 /** Cap a saved width to the current window. The saved number itself is unchanged. */
