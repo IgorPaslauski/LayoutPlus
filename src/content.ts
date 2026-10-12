@@ -70,6 +70,18 @@ const CSS = `
     margin-inline: auto;
   }
 
+  html[data-layout-plus="on"] [data-markdown-text-style="assistant-message"] pre,
+  html[data-layout-plus="on"] [data-markdown-text-style="assistant-message"] code {
+    font-size: var(--layout-plus-code-font);
+    line-height: var(--layout-plus-code-line);
+  }
+  html[data-layout-plus-code-wrap="on"] [data-markdown-text-style="assistant-message"] pre {
+    white-space: pre-wrap;
+  }
+  html[data-layout-plus-code-max="on"] [data-markdown-text-style="assistant-message"] pre {
+    max-height: var(--layout-plus-code-max);
+    overflow: auto;
+  }
   html[data-layout-plus="on"][data-layout-plus-code="on"]
   [data-markdown-text-style="assistant-message"] pre {
     max-width: 100%;
@@ -136,6 +148,11 @@ function render(settings: Settings): void {
   root.style.setProperty('--layout-plus-font', `${settings.fontSize}px`);
   root.style.setProperty('--layout-plus-line', `${settings.lineHeight / 10}`);
   root.style.setProperty('--layout-plus-paragraph', `${settings.paragraphGap}px`);
+  root.setAttribute('data-layout-plus-code-wrap', settings.codeWrap ? 'on' : 'off');
+  root.setAttribute('data-layout-plus-code-max', settings.codeMaxHeight > 0 ? 'on' : 'off');
+  root.style.setProperty('--layout-plus-code-font', `${settings.codeFontSize}px`);
+  root.style.setProperty('--layout-plus-code-line', `${settings.codeLineHeight / 10}`);
+  root.style.setProperty('--layout-plus-code-max', `${settings.codeMaxHeight}px`);
   let style = document.getElementById(STYLE_ID) as HTMLStyleElement | null;
   if (!settings.enabled) {
     document.querySelectorAll<HTMLElement>('[data-oai-writing-block-surface] header.sticky').forEach(

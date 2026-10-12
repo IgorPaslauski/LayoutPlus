@@ -28,6 +28,13 @@ function paint(): void {
   label('paragraphGapValue').textContent = `${settings.paragraphGap} px`;
   input('fontChoice').value = settings.fontChoice;
   input('focusLatest').checked = settings.focusLatest;
+  input('codeFontSize').value = String(settings.codeFontSize);
+  label('codeFontSizeValue').textContent = `${settings.codeFontSize} px`;
+  input('codeLineHeight').value = String(settings.codeLineHeight);
+  label('codeLineHeightValue').textContent = (settings.codeLineHeight / 10).toFixed(1);
+  input('codeMaxHeight').value = String(settings.codeMaxHeight);
+  label('codeMaxHeightValue').textContent = settings.codeMaxHeight === 0 ? t('codeMaxAuto') : `${settings.codeMaxHeight} px`;
+  input('codeWrap').checked = settings.codeWrap;
   input('expandCode').checked = settings.expandCode;
   input('expandTables').checked = settings.expandTables;
   input('breakout').checked = settings.breakout;
@@ -58,10 +65,10 @@ function update(next: Settings): void {
     label('status').textContent = t('statusSaved');
   }).catch(() => { label('status').textContent = t('statusError'); });
 }
-for (const field of ['conversationWidth','composerWidth','fontSize','textWidth','lineHeight','paragraphGap'] as const) {
+for (const field of ['conversationWidth','composerWidth','fontSize','textWidth','lineHeight','paragraphGap','codeFontSize','codeLineHeight','codeMaxHeight'] as const) {
   input(field).addEventListener('input', () => update({...settings, [field]: Number(input(field).value), preset:'custom'}));
 }
-for (const field of ['enabled','expandCode','expandTables','breakout','focusLatest'] as const) {
+for (const field of ['enabled','expandCode','expandTables','breakout','focusLatest','codeWrap'] as const) {
   input(field).addEventListener('change', () => update({...settings, [field]: input(field).checked, ...(field === 'enabled' ? {} : {preset:'custom' as const})}));
 }
 document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => {
