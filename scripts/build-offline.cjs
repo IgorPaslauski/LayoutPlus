@@ -10,7 +10,7 @@ fs.rmSync(path.join(root,'dist'),{recursive:true,force:true});
 fs.cpSync(path.join(root,'public'),path.join(root,'dist'),{recursive:true});
 stampManifest(root);
 let settings = fs.readFileSync(path.join(root,'src/settings.ts'),'utf8').replace(/\bexport\s+/g,'');
-for (const name of ['content','popup']) {
+for (const name of ['content','popup','background']) {
  let source = fs.readFileSync(path.join(root,'src',name+'.ts'),'utf8').replace(/^import .* from '\.\/settings';\n/m,'');
  let code = ts.transpileModule(`${settings}\n${source}`,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.None}}).outputText;
  fs.writeFileSync(path.join(root,'dist',name+'.js'),`(()=>{\n${code}\n})();\n`);

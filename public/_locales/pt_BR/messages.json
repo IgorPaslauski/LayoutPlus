@@ -179,6 +179,18 @@
     "message": "Não deu para usar",
     "description": "Quando o nome ou o arquivo é recusado."
   },
+  "cmdToggle": {
+    "message": "Ligar ou desligar",
+    "description": "Atalho que liga ou desliga o layout."
+  },
+  "cmdCycle": {
+    "message": "Próxima predefinição",
+    "description": "Atalho que percorre as predefinições."
+  },
+  "cmdPresentation": {
+    "message": "Apresentação",
+    "description": "Atalho do modo apresentação."
+  },
   "reset": {
     "message": "Restaurar",
     "description": "Botão de restaurar."

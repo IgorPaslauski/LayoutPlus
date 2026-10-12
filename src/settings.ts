@@ -171,6 +171,18 @@ export function togglePresentation(settings: Settings): Settings {
   if (settings.preset === 'presentation') return applyPreset(settings, settings.previousPreset);
   return applyPreset(settings, 'presentation');
 }
+export function cycleSettings(settings: Settings): Settings {
+  const steps: Array<() => Settings> = [
+    ...RETURN_PRESETS.map(preset => () => applyPreset(settings, preset)),
+    () => applyPreset(settings, 'presentation'),
+    ...settings.namedPresets.map((_, index) => () => applyNamed(settings, index))
+  ];
+  let currentIndex = -1;
+  if (settings.preset === 'presentation') currentIndex = RETURN_PRESETS.length;
+  else if (settings.preset !== 'custom') currentIndex = RETURN_PRESETS.indexOf(settings.preset);
+  else if (settings.activeNamed >= 0) currentIndex = RETURN_PRESETS.length + 1 + settings.activeNamed;
+  return steps[(currentIndex + 1) % steps.length]();
+}
 
 /** Cap a saved width to the current window. The saved number itself is unchanged. */
 export function appliedWidth(saved: number, viewport: number): number {

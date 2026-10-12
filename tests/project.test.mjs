@@ -218,6 +218,23 @@ test('named presets keep layout numbers and a short name', async () => {
   assert.equal(normalizeSettings({namedPresets: [{name: '', layout: {}}]}).namedPresets.length, 0);
 });
 
+test('shortcuts cycle presets and do not listen to the prompt', async () => {
+  const {DEFAULT_SETTINGS, cycleSettings, saveNamed} = await loadSource('../src/settings.ts');
+  const wide = {...DEFAULT_SETTINGS, preset: 'wide'};
+  assert.equal(cycleSettings(wide).preset, 'developer');
+  const withNamed = saveNamed(cycleSettings(cycleSettings(cycleSettings(cycleSettings(wide)))), 'Aula');
+  const afterPresentation = cycleSettings({...withNamed, preset: 'presentation', previousPreset: 'wide'});
+  assert.equal(afterPresentation.preset, 'custom');
+  assert.equal(afterPresentation.activeNamed, 0);
+  const background = read('src/background.ts');
+  const content = read('src/content.ts');
+  assert.ok(!background.includes('keydown'));
+  assert.ok(!content.includes('keydown'));
+  const manifest = JSON.parse(read('public/manifest.json'));
+  assert.deepEqual(Object.keys(manifest.commands), ['toggle-enabled', 'cycle-preset', 'toggle-presentation']);
+  assert.deepEqual(manifest.permissions, ['storage']);
+});
+
 test('CSS has balanced braces', () => {
   const content=read('src/content.ts');
   const css=content.match(/const CSS = `([\s\S]*?)`;/)?.[1];

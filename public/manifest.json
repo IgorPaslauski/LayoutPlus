@@ -19,6 +19,23 @@
       "48": "icons/icon48.png"
     }
   },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "toggle-enabled": {
+      "suggested_key": {"default": "Ctrl+Shift+9"},
+      "description": "__MSG_cmdToggle__"
+    },
+    "cycle-preset": {
+      "suggested_key": {"default": "Ctrl+Shift+8"},
+      "description": "__MSG_cmdCycle__"
+    },
+    "toggle-presentation": {
+      "suggested_key": {"default": "Ctrl+Shift+7"},
+      "description": "__MSG_cmdPresentation__"
+    }
+  },
   "content_scripts": [{
     "matches": ["https://chatgpt.com/*"],
     "js": ["content.js"],

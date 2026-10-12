@@ -11,7 +11,11 @@ await mkdir(outdir, {recursive:true});
 await cp(resolve(root,'public'),outdir,{recursive:true});
 stampManifest(root);
 const config = {
-  entryPoints: {content: resolve(root,'src/content.ts'), popup: resolve(root,'src/popup.ts')},
+  entryPoints: {
+    content: resolve(root,'src/content.ts'),
+    popup: resolve(root,'src/popup.ts'),
+    background: resolve(root,'src/background.ts')
+  },
   outdir, bundle:true, format:'iife', platform:'browser', target:'chrome114',
   minify: !process.argv.includes('--watch'), logLevel:'info'
 };

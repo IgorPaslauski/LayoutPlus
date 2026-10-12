@@ -179,6 +179,18 @@
     "message": "Could not use that preset",
     "description": "Shown when a name or import file is rejected."
   },
+  "cmdToggle": {
+    "message": "Turn layout on or off",
+    "description": "Keyboard command that enables or disables the layout."
+  },
+  "cmdCycle": {
+    "message": "Next preset",
+    "description": "Keyboard command that cycles presets."
+  },
+  "cmdPresentation": {
+    "message": "Presentation",
+    "description": "Keyboard command that toggles presentation mode."
+  },
   "reset": {
     "message": "Restore",
     "description": "Reset settings button."

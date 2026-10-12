@@ -14,6 +14,7 @@
 - The sidebar can be narrowed or collapsed, and a narrow window leaves it alone. Turning the extension off removes the override.
 - Present is one preset: larger type, a short centered column and a collapsed sidebar. Pressing it again returns to the previous preset. The composer stays, and upgrade controls are not hidden.
 - Up to four named presets can be saved, replaced, deleted, exported and imported as layout JSON. The file has widths and switches, not conversation text.
+- Chrome commands toggle the layout, cycle presets and open presentation. They are remappable in the browser and the extension does not listen to keys in the prompt.
 
 ## 0.2.2
 
