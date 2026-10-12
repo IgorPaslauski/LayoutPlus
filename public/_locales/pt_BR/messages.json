@@ -63,6 +63,10 @@
     "message": "Tabelas na largura toda",
     "description": "Interruptor de tabelas largas."
   },
+  "breakout": {
+    "message": "Blocos saem da coluna",
+    "description": "Código, tabelas e imagens podem escapar da coluna de leitura."
+  },
   "reset": {
     "message": "Restaurar",
     "description": "Botão de restaurar."

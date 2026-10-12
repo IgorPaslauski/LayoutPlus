@@ -19,7 +19,7 @@ test('manifest limits permissions and origins', () => {
 });
 test('popup ids match controls', () => {
   const html=read('public/popup.html');
-  for(const id of ['enabled','conversationWidth','textWidth','composerWidth','fontSize','expandCode','expandTables','reset','status']) {
+  for(const id of ['enabled','conversationWidth','textWidth','composerWidth','fontSize','expandCode','expandTables','breakout','reset','status']) {
     assert.ok(html.includes(`id="${id}"`), `Missing ${id}`);
   }
 });
@@ -101,6 +101,23 @@ test('reading column stays narrower than code and tables', async () => {
   assert.equal(legacy.textWidth, DEFAULT_SETTINGS.textWidth);
   assert.match(read('src/content.ts'), /--layout-plus-text/);
   assert.match(read('src/content.ts'), /assistant-message"\] > \*/);
+});
+
+test('breakout turns off when a parent clips or the window is narrow', async () => {
+  const {ancestorClips, breakoutActive} = await loadSource('../src/breakout.ts');
+  const parent = {parentElement: null, overflowX: 'hidden', overflowY: 'visible'};
+  const child = {parentElement: parent};
+  const styleOf = (node) => ({overflowX: node.overflowX ?? 'visible', overflowY: node.overflowY ?? 'visible'});
+  assert.equal(ancestorClips(child, styleOf), true);
+  parent.overflowX = 'visible';
+  assert.equal(ancestorClips(child, styleOf), false);
+  assert.equal(breakoutActive(true, 1400, false), true);
+  assert.equal(breakoutActive(true, 1400, true), false);
+  assert.equal(breakoutActive(true, 700, false), false);
+  assert.equal(breakoutActive(false, 1400, false), false);
+  const source = read('src/breakout.ts');
+  assert.ok(!source.includes('textContent'));
+  assert.ok(!source.includes('innerText'));
 });
 
 test('CSS has balanced braces', () => {

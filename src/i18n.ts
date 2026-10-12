@@ -15,6 +15,7 @@ export const ENGLISH: Record<string, string> = {
   textWidth: 'Column',
   expandCode: 'Full-width code',
   expandTables: 'Full-width tables',
+  breakout: 'Let blocks leave the column',
   reset: 'Restore',
   statusSaving: 'Saving...',
   statusSaved: 'Saved',

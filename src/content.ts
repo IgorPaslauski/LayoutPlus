@@ -1,3 +1,4 @@
+import {ancestorClips, breakoutActive} from './breakout';
 import {pageReport, RUNTIME_KEY} from './page';
 import {appliedWidth, DEFAULT_SETTINGS, normalizeSettings, SETTINGS_KEY, type Settings} from './settings';
 
@@ -62,6 +63,14 @@ const CSS = `
     max-width: 100%;
     margin-inline: 0;
   }
+  html[data-layout-plus="on"][data-layout-plus-breakout="on"]
+  [data-markdown-text-style="assistant-message"] :is(pre, table, img) {
+    width: calc(100vw - 48px);
+    max-width: calc(100vw - 48px);
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
   @media (max-width: 768px) {
     html[data-layout-plus="on"] [data-app-shell-main-content-layout] {
@@ -72,15 +81,33 @@ const CSS = `
       --thread-content-max-width: 100% !important;
       --thread-body-max-width: 100% !important;
     }
+    html[data-layout-plus="on"][data-layout-plus-breakout="on"]
+    [data-markdown-text-style="assistant-message"] :is(pre, table, img) {
+      width: 100%;
+      max-width: 100%;
+      left: auto;
+      transform: none;
+    }
   }
 `;
 
+function breakoutState(settings: Settings): 'on' | 'off' {
+  const sample = document.querySelector('[data-markdown-text-style="assistant-message"] :is(pre, table, img)');
+  const clipped = sample
+    ? ancestorClips(sample, element => {
+      const style = getComputedStyle(element as Element);
+      return {overflowX: style.overflowX, overflowY: style.overflowY};
+    })
+    : false;
+  return breakoutActive(settings.enabled && settings.breakout, window.innerWidth, clipped) ? 'on' : 'off';
+}
 function render(settings: Settings): void {
   current = settings;
   const root = document.documentElement;
   root.setAttribute(ROOT_ATTRIBUTE, settings.enabled ? 'on' : 'off');
   root.setAttribute('data-layout-plus-code', settings.expandCode ? 'on' : 'off');
   root.setAttribute('data-layout-plus-tables', settings.expandTables ? 'on' : 'off');
+  root.setAttribute('data-layout-plus-breakout', breakoutState(settings));
   root.style.setProperty('--layout-plus-conversation', `${appliedWidth(settings.conversationWidth, window.innerWidth)}px`);
   root.style.setProperty('--layout-plus-text', `${settings.textWidth}ch`);
   root.style.setProperty('--layout-plus-composer', `${appliedWidth(settings.composerWidth, window.innerWidth)}px`);
@@ -136,6 +163,7 @@ function scheduleWritingAlignment(): void {
   alignmentPending = true;
   requestAnimationFrame(() => {
     alignWritingActions();
+    document.documentElement.setAttribute('data-layout-plus-breakout', breakoutState(current));
     reportPage();
   });
 }

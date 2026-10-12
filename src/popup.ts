@@ -24,6 +24,7 @@ function paint(): void {
   label('textWidthValue').textContent = `${settings.textWidth} ch`;
   input('expandCode').checked = settings.expandCode;
   input('expandTables').checked = settings.expandTables;
+  input('breakout').checked = settings.breakout;
   document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => {
     button.classList.toggle('active', button.dataset.preset === settings.preset);
     button.setAttribute('aria-pressed', String(button.dataset.preset === settings.preset));
@@ -54,7 +55,7 @@ function update(next: Settings): void {
 for (const field of ['conversationWidth','composerWidth','fontSize','textWidth'] as const) {
   input(field).addEventListener('input', () => update({...settings, [field]: Number(input(field).value), preset:'custom'}));
 }
-for (const field of ['enabled','expandCode','expandTables'] as const) {
+for (const field of ['enabled','expandCode','expandTables','breakout'] as const) {
   input(field).addEventListener('change', () => update({...settings, [field]: input(field).checked, ...(field === 'enabled' ? {} : {preset:'custom' as const})}));
 }
 document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => {

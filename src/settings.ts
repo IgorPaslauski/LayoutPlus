@@ -9,6 +9,7 @@ export interface Settings {
   fontSize: number;
   expandCode: boolean;
   expandTables: boolean;
+  breakout: boolean;
 }
 export const DEFAULT_SETTINGS: Settings = {
   enabled: true,
@@ -18,13 +19,14 @@ export const DEFAULT_SETTINGS: Settings = {
   composerWidth: 1000,
   fontSize: 16,
   expandCode: true,
-  expandTables: true
+  expandTables: true,
+  breakout: false
 };
-type PresetFields = Pick<Settings, 'conversationWidth'|'textWidth'|'composerWidth'|'fontSize'|'expandCode'|'expandTables'>;
+type PresetFields = Pick<Settings, 'conversationWidth'|'textWidth'|'composerWidth'|'fontSize'|'expandCode'|'expandTables'|'breakout'>;
 export const PRESETS: Record<Exclude<Preset, 'custom'>, PresetFields> = {
-  default: {conversationWidth: 768, textWidth: 68, composerWidth: 768, fontSize: 16, expandCode: false, expandTables: false},
-  wide: {conversationWidth: 1200, textWidth: 72, composerWidth: 1000, fontSize: 16, expandCode: true, expandTables: true},
-  developer: {conversationWidth: 1600, textWidth: 72, composerWidth: 1300, fontSize: 15, expandCode: true, expandTables: true}
+  default: {conversationWidth: 768, textWidth: 68, composerWidth: 768, fontSize: 16, expandCode: false, expandTables: false, breakout: false},
+  wide: {conversationWidth: 1200, textWidth: 72, composerWidth: 1000, fontSize: 16, expandCode: true, expandTables: true, breakout: false},
+  developer: {conversationWidth: 1600, textWidth: 72, composerWidth: 1300, fontSize: 15, expandCode: true, expandTables: true, breakout: false}
 };
 const clamp = (value: unknown, min: number, max: number, fallback: number) =>
   typeof value === 'number' && Number.isFinite(value) ? Math.round(Math.max(min, Math.min(max, value))) : fallback;
@@ -39,7 +41,8 @@ export function normalizeSettings(input: unknown): Settings {
     composerWidth: clamp(value.composerWidth, 480, 2000, DEFAULT_SETTINGS.composerWidth),
     fontSize: clamp(value.fontSize, 12, 22, DEFAULT_SETTINGS.fontSize),
     expandCode: typeof value.expandCode === 'boolean' ? value.expandCode : DEFAULT_SETTINGS.expandCode,
-    expandTables: typeof value.expandTables === 'boolean' ? value.expandTables : DEFAULT_SETTINGS.expandTables
+    expandTables: typeof value.expandTables === 'boolean' ? value.expandTables : DEFAULT_SETTINGS.expandTables,
+    breakout: typeof value.breakout === 'boolean' ? value.breakout : DEFAULT_SETTINGS.breakout
   };
 }
 export function applyPreset(settings: Settings, preset: Exclude<Preset, 'custom'>): Settings {
