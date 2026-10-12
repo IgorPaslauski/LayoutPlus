@@ -37,6 +37,13 @@ export const ENGLISH: Record<string, string> = {
   codeWrap: 'Wrap code lines',
   sidebarAdjust: 'Adjust sidebar',
   sidebarWidth: 'Sidebar',
+  presetNamePlaceholder: 'Name',
+  saveNamed: 'Save',
+  deleteNamed: 'Delete preset',
+  exportNamed: 'Export',
+  importNamed: 'Import',
+  namedFull: 'Four presets already',
+  namedInvalid: 'Could not use that preset',
   reset: 'Restore',
   statusSaving: 'Saving...',
   statusSaved: 'Saved',
@@ -71,5 +78,9 @@ export function applyStaticCopy(): void {
   document.querySelectorAll<HTMLElement>('[data-i18n-label]').forEach(node => {
     const key = node.dataset.i18nLabel;
     if (key) node.setAttribute('aria-label', t(key));
+  });
+  document.querySelectorAll<HTMLInputElement>('[data-i18n-placeholder]').forEach(node => {
+    const key = node.dataset.i18nPlaceholder;
+    if (key) node.placeholder = t(key);
   });
 }

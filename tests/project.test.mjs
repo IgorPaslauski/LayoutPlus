@@ -193,6 +193,31 @@ test('presentation mode collapses the sidebar and can return', async () => {
   assert.ok(!content.includes('upgrade'));
 });
 
+test('named presets keep layout numbers and a short name', async () => {
+  const {DEFAULT_SETTINGS, saveNamed, deleteNamed, exportPayload, normalizeSettings} = await loadSource('../src/settings.ts');
+  let settings = DEFAULT_SETTINGS;
+  settings = saveNamed(settings, '  Leitura\nlonga  ');
+  assert.equal(settings.namedPresets[0].name, 'Leitura longa');
+  assert.equal(settings.namedPresets.length, 1);
+  assert.equal('enabled' in settings.namedPresets[0].layout, false);
+  settings = saveNamed(settings, 'Dois');
+  settings = saveNamed(settings, 'Três');
+  settings = saveNamed(settings, 'Quatro');
+  assert.equal(saveNamed(settings, 'Cinco'), null);
+  settings = saveNamed(settings, 'quatro');
+  assert.equal(settings.namedPresets.length, 4);
+  assert.equal(settings.namedPresets[3].name, 'quatro');
+  const removed = deleteNamed(settings, 0);
+  assert.equal(removed.namedPresets.length, 3);
+  const payload = exportPayload(settings);
+  assert.equal(payload.layoutPlus, 1);
+  const imported = normalizeSettings({namedPresets: [{name: 'Ok', layout: {conversationWidth: 900, note: 'secret chat text'}}]});
+  assert.equal(imported.namedPresets[0].name, 'Ok');
+  assert.equal(imported.namedPresets[0].layout.conversationWidth, 900);
+  assert.equal('note' in imported.namedPresets[0].layout, false);
+  assert.equal(normalizeSettings({namedPresets: [{name: '', layout: {}}]}).namedPresets.length, 0);
+});
+
 test('CSS has balanced braces', () => {
   const content=read('src/content.ts');
   const css=content.match(/const CSS = `([\s\S]*?)`;/)?.[1];

@@ -126,6 +126,51 @@ input[type="range"] {
 .check + .check { border-top: 1px solid var(--line-soft); }
 .check input { width: 15px; height: 15px; margin: 0; accent-color: var(--accent); }
 
+.named { padding: 8px 16px 12px; border-top: 1px solid var(--line); }
+.named-row { display: flex; gap: 8px; align-items: center; }
+.named-row + .named-row, #namedList { margin-top: 8px; }
+#presetName {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--chip);
+  color: var(--text);
+  padding: 0 8px;
+  font: 13px "Segoe UI", system-ui, sans-serif;
+}
+#saveNamed, #exportNamed, .file {
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  font: 500 13px/1 "Segoe UI", system-ui, sans-serif;
+}
+.file input { display: none; }
+.named-item { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
+.named-apply {
+  flex: 1;
+  height: 28px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--track);
+  color: var(--text);
+  text-align: left;
+  padding: 0 8px;
+  cursor: pointer;
+  font: 13px "Segoe UI", system-ui, sans-serif;
+}
+.named-apply.active { background: var(--chip); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.28); }
+.named-delete {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 16px;
+}
 footer {
   display: flex;
   align-items: center;

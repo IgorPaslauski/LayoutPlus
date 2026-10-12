@@ -151,6 +151,34 @@
     "message": "Barra",
     "description": "Largura da barra. Zero a recolhe."
   },
+  "presetNamePlaceholder": {
+    "message": "Nome",
+    "description": "Espaço do nome de uma predefinição salva."
+  },
+  "saveNamed": {
+    "message": "Salvar",
+    "description": "Salva o layout atual com um nome."
+  },
+  "deleteNamed": {
+    "message": "Apagar predefinição",
+    "description": "Nome acessível do botão que apaga uma predefinição."
+  },
+  "exportNamed": {
+    "message": "Exportar",
+    "description": "Baixa os layouts salvos em JSON."
+  },
+  "importNamed": {
+    "message": "Importar",
+    "description": "Carrega layouts salvos de um JSON."
+  },
+  "namedFull": {
+    "message": "Já há quatro",
+    "description": "Quando uma quinta predefinição nomeada não entra."
+  },
+  "namedInvalid": {
+    "message": "Não deu para usar",
+    "description": "Quando o nome ou o arquivo é recusado."
+  },
   "reset": {
     "message": "Restaurar",
     "description": "Botão de restaurar."

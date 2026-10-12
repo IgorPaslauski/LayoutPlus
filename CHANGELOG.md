@@ -13,6 +13,7 @@
 - The prompt can grow to a minimum height and scroll inside a maximum. Native height restores only those two values.
 - The sidebar can be narrowed or collapsed, and a narrow window leaves it alone. Turning the extension off removes the override.
 - Present is one preset: larger type, a short centered column and a collapsed sidebar. Pressing it again returns to the previous preset. The composer stays, and upgrade controls are not hidden.
+- Up to four named presets can be saved, replaced, deleted, exported and imported as layout JSON. The file has widths and switches, not conversation text.
 
 ## 0.2.2
 

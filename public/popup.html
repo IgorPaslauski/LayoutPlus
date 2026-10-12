@@ -157,6 +157,23 @@
       </div>
     </div>
 
+    </div>
+
+    <section class="named">
+      <div class="named-row">
+        <input id="presetName" type="text" maxlength="24" data-i18n-placeholder="presetNamePlaceholder" placeholder="Name">
+        <button id="saveNamed" type="button" data-i18n="saveNamed">Save</button>
+      </div>
+      <div id="namedList"></div>
+      <div class="named-row">
+        <button id="exportNamed" type="button" data-i18n="exportNamed">Export</button>
+        <label class="file">
+          <input id="importNamed" type="file" accept="application/json,.json">
+          <span data-i18n="importNamed">Import</span>
+        </label>
+      </div>
+    </section>
+
     <footer>
       <button id="reset" type="button" data-i18n="reset">Restore</button>
       <span id="status" role="status" data-i18n="statusSaved">Saved</span>

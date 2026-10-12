@@ -151,6 +151,34 @@
     "message": "Sidebar",
     "description": "Sidebar width. Zero collapses it."
   },
+  "presetNamePlaceholder": {
+    "message": "Name",
+    "description": "Placeholder for a saved preset name."
+  },
+  "saveNamed": {
+    "message": "Save",
+    "description": "Save the current layout under a name."
+  },
+  "deleteNamed": {
+    "message": "Delete preset",
+    "description": "Accessible name for deleting a saved preset."
+  },
+  "exportNamed": {
+    "message": "Export",
+    "description": "Download the saved layouts as JSON."
+  },
+  "importNamed": {
+    "message": "Import",
+    "description": "Load saved layouts from a JSON file."
+  },
+  "namedFull": {
+    "message": "Four presets already",
+    "description": "Shown when a fifth named preset would be added."
+  },
+  "namedInvalid": {
+    "message": "Could not use that preset",
+    "description": "Shown when a name or import file is rejected."
+  },
   "reset": {
     "message": "Restore",
     "description": "Reset settings button."

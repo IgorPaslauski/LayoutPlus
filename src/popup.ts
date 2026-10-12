@@ -1,6 +1,6 @@
 import {applyStaticCopy, t} from './i18n';
 import {RUNTIME_KEY, type PageReport} from './page';
-import {appliedWidth, DEFAULT_SETTINGS, SETTINGS_KEY, PRESETS, applyPreset, togglePresentation, normalizeSettings, type Settings} from './settings';
+import {appliedWidth, DEFAULT_SETTINGS, SETTINGS_KEY, PRESETS, applyPreset, applyNamed, deleteNamed, exportPayload, saveNamed, togglePresentation, normalizeSettings, type Settings} from './settings';
 applyStaticCopy();
 let settings = DEFAULT_SETTINGS;
 let viewport = 0;
@@ -53,6 +53,30 @@ function paint(): void {
   document.body.classList.toggle('is-off', !settings.enabled);
   const note = document.getElementById('presetNote');
   if (note) note.hidden = settings.preset !== 'custom';
+  paintNamed();
+}
+function paintNamed(): void {
+  const list = document.getElementById('namedList');
+  if (!list) return;
+  list.replaceChildren();
+  settings.namedPresets.forEach((item, index) => {
+    const row = document.createElement('div');
+    row.className = 'named-item';
+    const apply = document.createElement('button');
+    apply.type = 'button';
+    apply.className = 'named-apply';
+    apply.textContent = item.name;
+    apply.classList.toggle('active', index === settings.activeNamed);
+    apply.addEventListener('click', () => update(applyNamed(settings, index)));
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'named-delete';
+    remove.textContent = '×';
+    remove.setAttribute('aria-label', t('deleteNamed'));
+    remove.addEventListener('click', () => update(deleteNamed(settings, index)));
+    row.append(apply, remove);
+    list.append(row);
+  });
 }
 function paintPage(report: PageReport | undefined): void {
   viewport = report?.viewport ?? 0;
@@ -76,10 +100,10 @@ function update(next: Settings): void {
   }).catch(() => { label('status').textContent = t('statusError'); });
 }
 for (const field of ['conversationWidth','composerWidth','fontSize','textWidth','lineHeight','paragraphGap','codeFontSize','codeLineHeight','codeMaxHeight','composerMinHeight','composerMaxHeight','sidebarWidth'] as const) {
-  input(field).addEventListener('input', () => update({...settings, [field]: Number(input(field).value), preset:'custom'}));
+  input(field).addEventListener('input', () => update({...settings, [field]: Number(input(field).value), preset:'custom', activeNamed: -1}));
 }
 for (const field of ['enabled','expandCode','expandTables','expandMedia','breakout','focusLatest','codeWrap','sidebarAdjust'] as const) {
-  input(field).addEventListener('change', () => update({...settings, [field]: input(field).checked, ...(field === 'enabled' ? {} : {preset:'custom' as const})}));
+  input(field).addEventListener('change', () => update({...settings, [field]: input(field).checked, ...(field === 'enabled' ? {} : {preset:'custom' as const, activeNamed: -1})}));
 }
 document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => {
   button.addEventListener('click', () => {
@@ -89,8 +113,42 @@ document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => 
   });
 });
 label('reset').addEventListener('click', () => update({...DEFAULT_SETTINGS}));
-input('fontChoice').addEventListener('change', () => update({...settings, fontChoice: input('fontChoice').value as Settings['fontChoice'], preset: 'custom'}));
-label('composerNative').addEventListener('click', () => update({...settings, composerMinHeight: 0, composerMaxHeight: 0, preset: 'custom'}));
+input('fontChoice').addEventListener('change', () => update({...settings, fontChoice: input('fontChoice').value as Settings['fontChoice'], preset: 'custom', activeNamed: -1}));
+label('composerNative').addEventListener('click', () => update({...settings, composerMinHeight: 0, composerMaxHeight: 0, preset: 'custom', activeNamed: -1}));
+label('saveNamed').addEventListener('click', () => {
+  const next = saveNamed(settings, input('presetName').value);
+  if (!next) {
+    label('status').textContent = cleanEnough(input('presetName').value) ? t('namedFull') : t('namedInvalid');
+    return;
+  }
+  input('presetName').value = '';
+  update(next);
+});
+label('exportNamed').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(exportPayload(settings))], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'layout-plus-presets.json';
+  link.click();
+  URL.revokeObjectURL(url);
+});
+input('importNamed').addEventListener('change', () => {
+  const file = input('importNamed').files?.[0];
+  input('importNamed').value = '';
+  if (!file || file.size > 20000) {
+    label('status').textContent = t('namedInvalid');
+    return;
+  }
+  file.text().then(text => {
+    const parsed = JSON.parse(text) as {layoutPlus?: unknown; presets?: unknown};
+    if (parsed.layoutPlus !== 1) throw new Error('shape');
+    update({...settings, namedPresets: normalizeSettings({namedPresets: parsed.presets}).namedPresets});
+  }).catch(() => { label('status').textContent = t('namedInvalid'); });
+});
+function cleanEnough(value: string): boolean {
+  return value.trim().length > 0;
+}
 const session = globalThis.chrome?.storage?.session;
 if (session) {
   session.get(RUNTIME_KEY)
