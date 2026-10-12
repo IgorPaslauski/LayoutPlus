@@ -1,6 +1,6 @@
 import {ancestorClips, breakoutActive} from './breakout';
 import {pageReport, RUNTIME_KEY} from './page';
-import {appliedWidth, DEFAULT_SETTINGS, normalizeSettings, SETTINGS_KEY, type Settings} from './settings';
+import {appliedWidth, sidebarMode, DEFAULT_SETTINGS, normalizeSettings, SETTINGS_KEY, type Settings} from './settings';
 
 const STYLE_ID = 'layout-plus-style';
 const ROOT_ATTRIBUTE = 'data-layout-plus';
@@ -143,6 +143,16 @@ const CSS = `
     transform: translateX(-50%);
   }
 
+  @media (min-width: 769px) {
+    html[data-layout-plus="on"][data-layout-plus-sidebar="set"] nav {
+      width: var(--layout-plus-sidebar) !important;
+      min-width: 0 !important;
+      max-width: var(--layout-plus-sidebar) !important;
+      flex-basis: var(--layout-plus-sidebar) !important;
+      overflow: hidden !important;
+    }
+  }
+
   @media (max-width: 768px) {
     html[data-layout-plus="on"] [data-app-shell-main-content-layout] {
       --thread-content-expanded-max-width: 100%;
@@ -197,6 +207,8 @@ function render(settings: Settings): void {
   root.style.setProperty('--layout-plus-code-font', `${settings.codeFontSize}px`);
   root.style.setProperty('--layout-plus-code-line', `${settings.codeLineHeight / 10}`);
   root.style.setProperty('--layout-plus-code-max', `${settings.codeMaxHeight}px`);
+  root.setAttribute('data-layout-plus-sidebar', settings.enabled ? sidebarMode(settings.sidebarAdjust, window.innerWidth) : 'native');
+  root.style.setProperty('--layout-plus-sidebar', `${settings.sidebarWidth}px`);
   let style = document.getElementById(STYLE_ID) as HTMLStyleElement | null;
   if (!settings.enabled) {
     document.querySelectorAll<HTMLElement>('[data-oai-writing-block-surface] header.sticky').forEach(
