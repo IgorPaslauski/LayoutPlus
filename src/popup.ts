@@ -1,17 +1,25 @@
 import {applyStaticCopy, t} from './i18n';
 import {RUNTIME_KEY, type PageReport} from './page';
-import {DEFAULT_SETTINGS, SETTINGS_KEY, PRESETS, applyPreset, normalizeSettings, type Settings} from './settings';
+import {appliedWidth, DEFAULT_SETTINGS, SETTINGS_KEY, PRESETS, applyPreset, normalizeSettings, type Settings} from './settings';
 applyStaticCopy();
 let settings = DEFAULT_SETTINGS;
+let viewport = 0;
 let writeQueue: Promise<void> = Promise.resolve();
 const input = (id: string): HTMLInputElement => document.getElementById(id) as HTMLInputElement;
 const label = (id: string): HTMLElement => document.getElementById(id)!;
+function widthText(saved: number): string {
+  const applied = appliedWidth(saved, viewport);
+  if (!viewport || applied === saved) return `${saved} px`;
+  return `${saved} px · ${applied}`;
+}
 function paint(): void {
   input('enabled').checked = settings.enabled;
-  for (const field of ['conversationWidth','composerWidth','fontSize'] as const) {
-    input(field).value = String(settings[field]);
-    label(`${field}Value`).textContent = `${settings[field]} px`;
-  }
+  label('conversationWidthValue').textContent = widthText(settings.conversationWidth);
+  label('composerWidthValue').textContent = widthText(settings.composerWidth);
+  input('conversationWidth').value = String(settings.conversationWidth);
+  input('composerWidth').value = String(settings.composerWidth);
+  input('fontSize').value = String(settings.fontSize);
+  label('fontSizeValue').textContent = `${settings.fontSize} px`;
   input('expandCode').checked = settings.expandCode;
   input('expandTables').checked = settings.expandTables;
   document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => {
@@ -23,9 +31,13 @@ function paint(): void {
   if (note) note.hidden = settings.preset !== 'custom';
 }
 function paintPage(report: PageReport | undefined): void {
+  viewport = report?.viewport ?? 0;
   const note = document.getElementById('pageNote');
-  if (!note) return;
-  note.hidden = !(report?.visible === true && report.found === false);
+  if (note) note.hidden = !(report?.visible === true && report.found === false);
+  if (document.getElementById('conversationWidthValue')) {
+    label('conversationWidthValue').textContent = widthText(settings.conversationWidth);
+    label('composerWidthValue').textContent = widthText(settings.composerWidth);
+  }
 }
 function update(next: Settings): void {
   settings = normalizeSettings(next);
