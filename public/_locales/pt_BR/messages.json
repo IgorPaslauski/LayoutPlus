@@ -1,0 +1,78 @@
+{
+  "extName": {
+    "message": "ChatGPT Layout+",
+    "description": "Nome da extensão no Chrome."
+  },
+  "extDescription": {
+    "message": "Deixe o ChatGPT mais largo: conversa, prompt, texto, código e tabelas.",
+    "description": "Descrição curta da extensão."
+  },
+  "actionTitle": {
+    "message": "ChatGPT Layout+",
+    "description": "Título do botão na barra."
+  },
+  "enableTitle": {
+    "message": "Ativar extensão",
+    "description": "Dica do interruptor de ligar."
+  },
+  "presetsLabel": {
+    "message": "Predefinições",
+    "description": "Nome acessível do grupo de predefinições."
+  },
+  "presetDefault": {
+    "message": "Padrão",
+    "description": "Botão da predefinição padrão."
+  },
+  "presetWide": {
+    "message": "Amplo",
+    "description": "Botão da predefinição ampla."
+  },
+  "presetDeveloper": {
+    "message": "Código",
+    "description": "Botão da predefinição de código."
+  },
+  "presetCustom": {
+    "message": "Ajuste manual",
+    "description": "Aviso quando os valores não batem com uma predefinição."
+  },
+  "conversation": {
+    "message": "Conversa",
+    "description": "Controle da largura da conversa."
+  },
+  "composer": {
+    "message": "Prompt",
+    "description": "Controle da largura do prompt."
+  },
+  "fontSize": {
+    "message": "Texto",
+    "description": "Controle do tamanho do texto."
+  },
+  "expandCode": {
+    "message": "Código na largura toda",
+    "description": "Interruptor de código largo."
+  },
+  "expandTables": {
+    "message": "Tabelas na largura toda",
+    "description": "Interruptor de tabelas largas."
+  },
+  "reset": {
+    "message": "Restaurar",
+    "description": "Botão de restaurar."
+  },
+  "statusSaving": {
+    "message": "Salvando...",
+    "description": "Estado durante a gravação."
+  },
+  "statusSaved": {
+    "message": "Salvo",
+    "description": "Estado depois de gravar."
+  },
+  "statusError": {
+    "message": "Erro ao salvar",
+    "description": "Estado quando a gravação falha."
+  },
+  "statusStorage": {
+    "message": "Armazenamento indisponível",
+    "description": "Estado quando o armazenamento não abre."
+  }
+}

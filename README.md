@@ -13,6 +13,7 @@ The extension version is the `version` field in `package.json`. The build writes
 - Reply font size (12–22 px)
 - Expand code blocks and tables
 - Enable or disable without uninstalling
+- English and Brazilian Portuguese, following the browser language
 - Settings stored with `chrome.storage.sync`
 
 ## Limitations
@@ -69,7 +70,7 @@ If the npm registry is unavailable and TypeScript is installed globally, `npm ru
 - `src/settings.ts`: settings types, validation, presets
 - `src/popup.ts`: popup controls and sync persistence
 - `src/content.ts`: scoped CSS overrides on the ChatGPT page
-- `public/`: manifest template and popup HTML/CSS. The template has no `version` field.
+- `public/`: manifest template, popup HTML/CSS and `_locales`. The template has no `version` field. English is `default_locale`.
 - `scripts/build.mjs`: browser bundle and `dist/`
 - `scripts/stamp-manifest.cjs`: copies `package.json` version into `dist/manifest.json`
 - `tests/`: source checks that do not require a build
