@@ -177,6 +177,22 @@ test('sidebar width stays off on a narrow window', async () => {
   assert.ok(!content.includes('.click('));
 });
 
+test('presentation mode collapses the sidebar and can return', async () => {
+  const {normalizeSettings, togglePresentation, PRESETS, DEFAULT_SETTINGS} = await loadSource('../src/settings.ts');
+  const entered = togglePresentation(normalizeSettings({...DEFAULT_SETTINGS, preset: 'wide'}));
+  assert.equal(entered.preset, 'presentation');
+  assert.equal(entered.previousPreset, 'wide');
+  assert.equal(entered.sidebarAdjust, true);
+  assert.equal(entered.sidebarWidth, 0);
+  assert.equal(entered.fontSize, 24);
+  assert.equal(entered.textWidth, PRESETS.presentation.textWidth);
+  const left = togglePresentation(entered);
+  assert.equal(left.preset, 'wide');
+  assert.equal(left.sidebarAdjust, false);
+  const content = read('src/content.ts');
+  assert.ok(!content.includes('upgrade'));
+});
+
 test('CSS has balanced braces', () => {
   const content=read('src/content.ts');
   const css=content.match(/const CSS = `([\s\S]*?)`;/)?.[1];

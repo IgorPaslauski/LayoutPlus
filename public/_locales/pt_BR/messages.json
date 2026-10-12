@@ -35,6 +35,10 @@
     "message": "Leitura",
     "description": "Botão da predefinição de leitura."
   },
+  "presetPresentation": {
+    "message": "Tela",
+    "description": "Botão do modo apresentação. Outro clique sai dele."
+  },
   "presetCustom": {
     "message": "Ajuste manual",
     "description": "Aviso quando os valores não batem com uma predefinição."

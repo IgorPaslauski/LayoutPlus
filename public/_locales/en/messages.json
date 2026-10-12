@@ -35,6 +35,10 @@
     "message": "Read",
     "description": "Reading preset button."
   },
+  "presetPresentation": {
+    "message": "Present",
+    "description": "Presentation preset button. Press again to leave it."
+  },
   "presetCustom": {
     "message": "Manual adjustment",
     "description": "Shown when the current values do not match a preset."
