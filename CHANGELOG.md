@@ -10,6 +10,7 @@
 - Reading controls add line spacing, paragraph gap, a system serif or open sans, and a Read preset. Earlier messages can fade by DOM order, without reading their text.
 - Code blocks have their own size, spacing, optional wrapping and a height cap. The Code preset turns those on and lets the block leave the column. Line numbers stay off because the highlighter uses token spans, not lines.
 - Tables keep a sticky header and first column, scroll sideways inside the table, and stripe rows. Images and diagrams have their own switch.
+- The prompt can grow to a minimum height and scroll inside a maximum. Native height restores only those two values.
 
 ## 0.2.2
 

@@ -51,6 +51,22 @@
     "message": "Prompt",
     "description": "Controle da largura do prompt."
   },
+  "composerMinHeight": {
+    "message": "Altura do prompt",
+    "description": "Altura mínima do compositor. Zero mantém a altura nativa."
+  },
+  "composerMaxHeight": {
+    "message": "Limite do prompt",
+    "description": "Altura máxima antes da rolagem interna."
+  },
+  "composerNative": {
+    "message": "Altura nativa",
+    "description": "Restaura a altura do prompt sem mudar o resto."
+  },
+  "heightNative": {
+    "message": "Nativa",
+    "description": "Quando o controle de altura fica com a página."
+  },
   "fontSize": {
     "message": "Texto",
     "description": "Controle do tamanho do texto."

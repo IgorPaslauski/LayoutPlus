@@ -51,6 +51,22 @@
     "message": "Prompt",
     "description": "Composer width slider."
   },
+  "composerMinHeight": {
+    "message": "Prompt height",
+    "description": "Minimum composer height. Zero keeps the native height."
+  },
+  "composerMaxHeight": {
+    "message": "Prompt limit",
+    "description": "Maximum composer height before it scrolls."
+  },
+  "composerNative": {
+    "message": "Native height",
+    "description": "Restore the composer height without changing other settings."
+  },
+  "heightNative": {
+    "message": "Native",
+    "description": "Shown when a height control is left to the page."
+  },
   "fontSize": {
     "message": "Text",
     "description": "Reply font size slider."
