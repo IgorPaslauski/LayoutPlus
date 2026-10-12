@@ -1,4 +1,5 @@
 import {applyStaticCopy, t} from './i18n';
+import {RUNTIME_KEY, type PageReport} from './page';
 import {DEFAULT_SETTINGS, SETTINGS_KEY, PRESETS, applyPreset, normalizeSettings, type Settings} from './settings';
 applyStaticCopy();
 let settings = DEFAULT_SETTINGS;
@@ -20,6 +21,11 @@ function paint(): void {
   document.body.classList.toggle('is-off', !settings.enabled);
   const note = document.getElementById('presetNote');
   if (note) note.hidden = settings.preset !== 'custom';
+}
+function paintPage(report: PageReport | undefined): void {
+  const note = document.getElementById('pageNote');
+  if (!note) return;
+  note.hidden = !(report?.visible === true && report.found === false);
 }
 function update(next: Settings): void {
   settings = normalizeSettings(next);
@@ -44,6 +50,15 @@ document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => 
   });
 });
 label('reset').addEventListener('click', () => update({...DEFAULT_SETTINGS}));
+const session = globalThis.chrome?.storage?.session;
+if (session) {
+  session.get(RUNTIME_KEY)
+    .then(result => paintPage(result[RUNTIME_KEY] as PageReport | undefined))
+    .catch(() => paintPage(undefined));
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'session' && changes[RUNTIME_KEY]) paintPage(changes[RUNTIME_KEY].newValue as PageReport | undefined);
+  });
+}
 const storage = globalThis.chrome?.storage?.sync;
 if (storage) {
   storage.get(SETTINGS_KEY)

@@ -62,6 +62,22 @@ test('popup and manifest use the same locale catalog', async () => {
   assert.equal(parsed.default_locale, 'en');
 });
 
+test('page warning depends on layout anchors, not conversation text', async () => {
+  const {anchorsFound, pageReport, PAGE_ANCHORS} = await loadSource('../src/page.ts');
+  const present = new Set(PAGE_ANCHORS);
+  assert.equal(anchorsFound(selector => present.has(selector) ? {node: true} : null), true);
+  assert.equal(anchorsFound(() => null), false);
+  assert.equal(anchorsFound(selector => present.has(selector) ? {node: true} : null), true);
+  const missing = pageReport(() => null, true);
+  assert.equal(missing.found, false);
+  assert.equal(missing.visible, true);
+  const source = read('src/page.ts');
+  assert.match(read('src/content.ts'), /pageReport\(/);
+  assert.ok(!source.includes('innerText'));
+  assert.ok(!source.includes('textContent'));
+  assert.ok(!source.includes('conversation'));
+});
+
 test('CSS has balanced braces', () => {
   const content=read('src/content.ts');
   const css=content.match(/const CSS = `([\s\S]*?)`;/)?.[1];

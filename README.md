@@ -14,6 +14,7 @@ The extension version is the `version` field in `package.json`. The build writes
 - Expand code blocks and tables
 - Enable or disable without uninstalling
 - English and Brazilian Portuguese, following the browser language
+- A popup notice when the ChatGPT layout anchors are missing
 - Settings stored with `chrome.storage.sync`
 
 ## Limitations

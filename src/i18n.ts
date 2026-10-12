@@ -8,6 +8,7 @@ export const ENGLISH: Record<string, string> = {
   presetWide: 'Wide',
   presetDeveloper: 'Code',
   presetCustom: 'Manual adjustment',
+  pageMissing: 'The layout could not find this page',
   conversation: 'Conversation',
   composer: 'Prompt',
   fontSize: 'Text',

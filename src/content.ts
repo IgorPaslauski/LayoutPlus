@@ -1,3 +1,4 @@
+import {pageReport, RUNTIME_KEY} from './page';
 import {DEFAULT_SETTINGS, normalizeSettings, SETTINGS_KEY, type Settings} from './settings';
 
 const STYLE_ID = 'layout-plus-style';
@@ -124,8 +125,23 @@ function alignWritingActions(): void {
 function scheduleWritingAlignment(): void {
   if (alignmentPending) return;
   alignmentPending = true;
-  requestAnimationFrame(alignWritingActions);
+  requestAnimationFrame(() => {
+    alignWritingActions();
+    reportPage();
+  });
 }
+let lastPageReport = '';
+function reportPage(): void {
+  const report = pageReport(
+    selector => document.querySelector(selector),
+    document.visibilityState === 'visible'
+  );
+  const encoded = JSON.stringify(report);
+  if (encoded === lastPageReport) return;
+  lastPageReport = encoded;
+  chrome.storage.session.set({[RUNTIME_KEY]: report}).catch(() => {});
+}
+document.addEventListener('visibilitychange', reportPage);
 window.addEventListener('scroll', scheduleWritingAlignment, {capture: true, passive: true});
 window.addEventListener('resize', scheduleWritingAlignment, {passive: true});
 window.addEventListener('pageshow', scheduleWritingAlignment);

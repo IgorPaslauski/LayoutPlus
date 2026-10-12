@@ -35,6 +35,10 @@
     "message": "Ajuste manual",
     "description": "Aviso quando os valores não batem com uma predefinição."
   },
+  "pageMissing": {
+    "message": "O layout não encontrou a página",
+    "description": "Aviso quando os pontos de apoio do layout somem."
+  },
   "conversation": {
     "message": "Conversa",
     "description": "Controle da largura da conversa."

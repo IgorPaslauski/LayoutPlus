@@ -35,6 +35,10 @@
     "message": "Manual adjustment",
     "description": "Shown when the current values do not match a preset."
   },
+  "pageMissing": {
+    "message": "The layout could not find this page",
+    "description": "Shown when the ChatGPT layout anchors are missing."
+  },
   "conversation": {
     "message": "Conversation",
     "description": "Conversation width slider."
