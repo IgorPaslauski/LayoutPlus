@@ -19,7 +19,7 @@ The extension version is the `version` field in `package.json`. The build writes
 
 ## Limitations
 
-ChatGPT is a third-party SPA and may change CSS class names or DOM. Overrides are best-effort; not every component honors each width preference. This extension does not bypass UI restrictions. Widths are capped by the viewport, and narrow screens fall back toward full width.
+Widths are capped by the current window. The saved number is unchanged, and below 768 px the column falls back toward the viewport. Narrow screens already used a full-width media query.
 
 ## Privacy
 

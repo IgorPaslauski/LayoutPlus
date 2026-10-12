@@ -68,7 +68,9 @@ test('page warning depends on layout anchors, not conversation text', async () =
   assert.equal(anchorsFound(selector => present.has(selector) ? {node: true} : null), true);
   assert.equal(anchorsFound(() => null), false);
   assert.equal(anchorsFound(selector => present.has(selector) ? {node: true} : null), true);
-  const missing = pageReport(() => null, true);
+  const missing = pageReport(() => null, true, 400);
+  assert.equal(missing.found, false);
+  assert.equal(missing.viewport, 400);
   assert.equal(missing.found, false);
   assert.equal(missing.visible, true);
   const source = read('src/page.ts');
@@ -76,6 +78,16 @@ test('page warning depends on layout anchors, not conversation text', async () =
   assert.ok(!source.includes('innerText'));
   assert.ok(!source.includes('textContent'));
   assert.ok(!source.includes('conversation'));
+});
+
+test('saved width is capped to the current window', async () => {
+  const {appliedWidth} = await loadSource('../src/settings.ts');
+  assert.equal(appliedWidth(1600, 1280), 1248);
+  assert.equal(appliedWidth(800, 1440), 800);
+  assert.equal(appliedWidth(1600, 0), 1600);
+  assert.equal(appliedWidth(1600, 700), 700);
+  assert.match(read('src/content.ts'), /appliedWidth\(/);
+  assert.ok(!read('src/content.ts').includes('storage.local'));
 });
 
 test('CSS has balanced braces', () => {

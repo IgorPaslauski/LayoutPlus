@@ -1,5 +1,5 @@
 import {pageReport, RUNTIME_KEY} from './page';
-import {DEFAULT_SETTINGS, normalizeSettings, SETTINGS_KEY, type Settings} from './settings';
+import {appliedWidth, DEFAULT_SETTINGS, normalizeSettings, SETTINGS_KEY, type Settings} from './settings';
 
 const STYLE_ID = 'layout-plus-style';
 const ROOT_ATTRIBUTE = 'data-layout-plus';
@@ -73,8 +73,8 @@ function render(settings: Settings): void {
   root.setAttribute(ROOT_ATTRIBUTE, settings.enabled ? 'on' : 'off');
   root.setAttribute('data-layout-plus-code', settings.expandCode ? 'on' : 'off');
   root.setAttribute('data-layout-plus-tables', settings.expandTables ? 'on' : 'off');
-  root.style.setProperty('--layout-plus-conversation', `${settings.conversationWidth}px`);
-  root.style.setProperty('--layout-plus-composer', `${settings.composerWidth}px`);
+  root.style.setProperty('--layout-plus-conversation', `${appliedWidth(settings.conversationWidth, window.innerWidth)}px`);
+  root.style.setProperty('--layout-plus-composer', `${appliedWidth(settings.composerWidth, window.innerWidth)}px`);
   root.style.setProperty('--layout-plus-font', `${settings.fontSize}px`);
   let style = document.getElementById(STYLE_ID) as HTMLStyleElement | null;
   if (!settings.enabled) {
@@ -134,7 +134,8 @@ let lastPageReport = '';
 function reportPage(): void {
   const report = pageReport(
     selector => document.querySelector(selector),
-    document.visibilityState === 'visible'
+    document.visibilityState === 'visible',
+    window.innerWidth
   );
   const encoded = JSON.stringify(report);
   if (encoded === lastPageReport) return;
@@ -143,7 +144,7 @@ function reportPage(): void {
 }
 document.addEventListener('visibilitychange', reportPage);
 window.addEventListener('scroll', scheduleWritingAlignment, {capture: true, passive: true});
-window.addEventListener('resize', scheduleWritingAlignment, {passive: true});
+window.addEventListener('resize', () => render(current), {passive: true});
 window.addEventListener('pageshow', scheduleWritingAlignment);
 const writingObserver = new MutationObserver(scheduleWritingAlignment);
 writingObserver.observe(document.documentElement, {childList: true, subtree: true});

@@ -41,3 +41,10 @@ export function normalizeSettings(input: unknown): Settings {
 export function applyPreset(settings: Settings, preset: Exclude<Preset, 'custom'>): Settings {
   return { ...settings, preset, ...PRESETS[preset] };
 }
+
+/** Cap a saved width to the current window. The saved number itself is unchanged. */
+export function appliedWidth(saved: number, viewport: number): number {
+  if (!Number.isFinite(viewport) || viewport <= 0) return saved;
+  if (viewport <= 768) return Math.max(1, Math.round(viewport));
+  return Math.min(saved, Math.max(320, Math.round(viewport - 32)));
+}
