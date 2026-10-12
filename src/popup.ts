@@ -1,4 +1,6 @@
+import {applyStaticCopy, t} from './i18n';
 import {DEFAULT_SETTINGS, SETTINGS_KEY, PRESETS, applyPreset, normalizeSettings, type Settings} from './settings';
+applyStaticCopy();
 let settings = DEFAULT_SETTINGS;
 let writeQueue: Promise<void> = Promise.resolve();
 const input = (id: string): HTMLInputElement => document.getElementById(id) as HTMLInputElement;
@@ -22,12 +24,12 @@ function paint(): void {
 function update(next: Settings): void {
   settings = normalizeSettings(next);
   paint();
-  label('status').textContent = 'Salvando...';
+  label('status').textContent = t('statusSaving');
   const snapshot = {...settings};
   writeQueue = writeQueue.catch(() => {}).then(async () => {
     await chrome.storage.sync.set({[SETTINGS_KEY]: snapshot});
-    label('status').textContent = 'Salvo';
-  }).catch(() => { label('status').textContent = 'Erro ao salvar'; });
+    label('status').textContent = t('statusSaved');
+  }).catch(() => { label('status').textContent = t('statusError'); });
 }
 for (const field of ['conversationWidth','composerWidth','fontSize'] as const) {
   input(field).addEventListener('input', () => update({...settings, [field]: Number(input(field).value), preset:'custom'}));
@@ -46,8 +48,8 @@ const storage = globalThis.chrome?.storage?.sync;
 if (storage) {
   storage.get(SETTINGS_KEY)
     .then(result => { settings = normalizeSettings(result[SETTINGS_KEY]); paint(); })
-    .catch(() => { settings = DEFAULT_SETTINGS; paint(); label('status').textContent = 'Armazenamento indisponível'; });
+    .catch(() => { settings = DEFAULT_SETTINGS; paint(); label('status').textContent = t('statusStorage'); });
 } else {
   paint();
-  label('status').textContent = 'Armazenamento indisponível';
+  label('status').textContent = t('statusStorage');
 }

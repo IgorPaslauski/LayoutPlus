@@ -4,7 +4,7 @@ import {fileURLToPath} from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = resolve(root, 'dist');
-const expected = ['content.js', 'icons', 'manifest.json', 'popup.css', 'popup.html', 'popup.js'];
+const expected = ['_locales', 'content.js', 'icons', 'manifest.json', 'popup.css', 'popup.html', 'popup.js'];
 const actual = readdirSync(dist).sort();
 const errors = [];
 

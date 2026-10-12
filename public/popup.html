@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,37 +12,37 @@
       <h1>Layout+</h1>
       <p>ChatGPT</p>
     </div>
-    <label class="switch" title="Ativar extensão">
+    <label class="switch" data-i18n-title="enableTitle" title="Turn extension on">
       <input id="enabled" type="checkbox" checked>
       <span></span>
     </label>
   </header>
   <main>
-    <div class="presets" role="group" aria-label="Predefinições">
-      <button type="button" data-preset="default">Padrão</button>
-      <button type="button" data-preset="wide">Amplo</button>
-      <button type="button" data-preset="developer">Código</button>
+    <div class="presets" role="group" data-i18n-label="presetsLabel" aria-label="Presets">
+      <button type="button" data-preset="default" data-i18n="presetDefault">Default</button>
+      <button type="button" data-preset="wide" data-i18n="presetWide">Wide</button>
+      <button type="button" data-preset="developer" data-i18n="presetDeveloper">Code</button>
     </div>
-    <p id="presetNote" class="note" hidden>Ajuste manual</p>
+    <p id="presetNote" class="note" data-i18n="presetCustom" hidden>Manual adjustment</p>
 
     <div class="fields">
       <div class="control">
         <div class="control-top">
-          <label for="conversationWidth">Conversa</label>
+          <label for="conversationWidth" data-i18n="conversation">Conversation</label>
           <output id="conversationWidthValue"></output>
         </div>
         <input id="conversationWidth" type="range" min="640" max="2000" step="20">
       </div>
       <div class="control">
         <div class="control-top">
-          <label for="composerWidth">Prompt</label>
+          <label for="composerWidth" data-i18n="composer">Prompt</label>
           <output id="composerWidthValue"></output>
         </div>
         <input id="composerWidth" type="range" min="640" max="2000" step="20">
       </div>
       <div class="control">
         <div class="control-top">
-          <label for="fontSize">Texto</label>
+          <label for="fontSize" data-i18n="fontSize">Text</label>
           <output id="fontSizeValue"></output>
         </div>
         <input id="fontSize" type="range" min="12" max="22" step="1">
@@ -52,17 +52,17 @@
     <div class="checks">
       <label class="check">
         <input id="expandCode" type="checkbox">
-        <span>Código na largura toda</span>
+        <span data-i18n="expandCode">Full-width code</span>
       </label>
       <label class="check">
         <input id="expandTables" type="checkbox">
-        <span>Tabelas na largura toda</span>
+        <span data-i18n="expandTables">Full-width tables</span>
       </label>
     </div>
 
     <footer>
-      <button id="reset" type="button">Restaurar</button>
-      <span id="status" role="status">Salvo</span>
+      <button id="reset" type="button" data-i18n="reset">Restore</button>
+      <span id="status" role="status" data-i18n="statusSaved">Saved</span>
     </footer>
   </main>
   <script src="popup.js"></script>

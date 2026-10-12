@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- The popup, toolbar title and manifest description follow the browser language. English is the fallback and Brazilian Portuguese is included.
+
 ## 0.2.2
 
 Writing-block collision fix now moves only Copy/Open editor action icons when the fixed ChatGPT titlebar overlaps them; the title and header remain at their native position. Validated with static tests; visual Chrome validation still required.

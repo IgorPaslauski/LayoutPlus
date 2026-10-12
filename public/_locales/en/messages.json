@@ -1,0 +1,78 @@
+{
+  "extName": {
+    "message": "ChatGPT Layout+",
+    "description": "Extension name shown in Chrome."
+  },
+  "extDescription": {
+    "message": "Make ChatGPT wider: conversation, prompt, text, code and tables.",
+    "description": "Short extension description."
+  },
+  "actionTitle": {
+    "message": "ChatGPT Layout+",
+    "description": "Toolbar button title."
+  },
+  "enableTitle": {
+    "message": "Turn extension on",
+    "description": "Tooltip for the enable switch."
+  },
+  "presetsLabel": {
+    "message": "Presets",
+    "description": "Accessible name for the preset group."
+  },
+  "presetDefault": {
+    "message": "Default",
+    "description": "Default preset button."
+  },
+  "presetWide": {
+    "message": "Wide",
+    "description": "Wide preset button."
+  },
+  "presetDeveloper": {
+    "message": "Code",
+    "description": "Developer preset button."
+  },
+  "presetCustom": {
+    "message": "Manual adjustment",
+    "description": "Shown when the current values do not match a preset."
+  },
+  "conversation": {
+    "message": "Conversation",
+    "description": "Conversation width slider."
+  },
+  "composer": {
+    "message": "Prompt",
+    "description": "Composer width slider."
+  },
+  "fontSize": {
+    "message": "Text",
+    "description": "Reply font size slider."
+  },
+  "expandCode": {
+    "message": "Full-width code",
+    "description": "Expand code blocks toggle."
+  },
+  "expandTables": {
+    "message": "Full-width tables",
+    "description": "Expand tables toggle."
+  },
+  "reset": {
+    "message": "Restore",
+    "description": "Reset settings button."
+  },
+  "statusSaving": {
+    "message": "Saving...",
+    "description": "Status while a write is in flight."
+  },
+  "statusSaved": {
+    "message": "Saved",
+    "description": "Status after a successful write."
+  },
+  "statusError": {
+    "message": "Couldn't save",
+    "description": "Status when storage rejects the write."
+  },
+  "statusStorage": {
+    "message": "Storage unavailable",
+    "description": "Status when chrome.storage cannot be read."
+  }
+}
