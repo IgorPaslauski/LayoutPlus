@@ -31,6 +31,13 @@ const CSS = `
     max-width: 100%;
     min-width: 0;
   }
+  html[data-layout-plus-composer-min="on"] [data-chatgpt-composer][data-composer-placement="thread"] {
+    min-height: var(--layout-plus-composer-min);
+  }
+  html[data-layout-plus-composer-max="on"] [data-chatgpt-composer][data-composer-placement="thread"] {
+    max-height: var(--layout-plus-composer-max);
+    overflow-y: auto;
+  }
 
   /* Keep the native writing-block header/title in its original position.
      Only the action buttons receive a temporary offset when overlapping the
@@ -176,6 +183,10 @@ function render(settings: Settings): void {
   root.style.setProperty('--layout-plus-conversation', `${appliedWidth(settings.conversationWidth, window.innerWidth)}px`);
   root.style.setProperty('--layout-plus-text', `${settings.textWidth}ch`);
   root.style.setProperty('--layout-plus-composer', `${appliedWidth(settings.composerWidth, window.innerWidth)}px`);
+  root.setAttribute('data-layout-plus-composer-min', settings.composerMinHeight > 0 ? 'on' : 'off');
+  root.setAttribute('data-layout-plus-composer-max', settings.composerMaxHeight > 0 ? 'on' : 'off');
+  root.style.setProperty('--layout-plus-composer-min', `${settings.composerMinHeight}px`);
+  root.style.setProperty('--layout-plus-composer-max', `${settings.composerMaxHeight}px`);
   root.setAttribute('data-layout-plus-font', settings.fontChoice);
   root.setAttribute('data-layout-plus-focus', settings.enabled && settings.focusLatest ? 'on' : 'off');
   root.style.setProperty('--layout-plus-font', `${settings.fontSize}px`);

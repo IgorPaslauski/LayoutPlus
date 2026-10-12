@@ -51,6 +51,21 @@
       </div>
       <div class="control">
         <div class="control-top">
+          <label for="composerMinHeight" data-i18n="composerMinHeight">Prompt height</label>
+          <output id="composerMinHeightValue"></output>
+        </div>
+        <input id="composerMinHeight" type="range" min="0" max="320" step="8">
+      </div>
+      <div class="control">
+        <div class="control-top">
+          <label for="composerMaxHeight" data-i18n="composerMaxHeight">Prompt limit</label>
+          <output id="composerMaxHeightValue"></output>
+        </div>
+        <input id="composerMaxHeight" type="range" min="0" max="480" step="8">
+      </div>
+      <button id="composerNative" class="text-button" type="button" data-i18n="composerNative">Native height</button>
+      <div class="control">
+        <div class="control-top">
           <label for="fontSize" data-i18n="fontSize">Text</label>
           <output id="fontSizeValue"></output>
         </div>

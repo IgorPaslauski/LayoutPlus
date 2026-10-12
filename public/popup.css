@@ -134,7 +134,7 @@ footer {
   padding: 0 16px;
   border-top: 1px solid var(--line);
 }
-#reset {
+#reset, .text-button {
   border: 0;
   padding: 0;
   background: transparent;
@@ -142,6 +142,7 @@ footer {
   cursor: pointer;
   font: 500 13px/1 "Segoe UI", system-ui, sans-serif;
 }
+.text-button { margin: 0 16px 8px; }
 #status { color: var(--faint); font-size: 12px; }
 button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 

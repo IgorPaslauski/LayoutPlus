@@ -18,6 +18,10 @@ function paint(): void {
   label('composerWidthValue').textContent = widthText(settings.composerWidth);
   input('conversationWidth').value = String(settings.conversationWidth);
   input('composerWidth').value = String(settings.composerWidth);
+  input('composerMinHeight').value = String(settings.composerMinHeight);
+  label('composerMinHeightValue').textContent = settings.composerMinHeight === 0 ? t('heightNative') : `${settings.composerMinHeight} px`;
+  input('composerMaxHeight').value = String(settings.composerMaxHeight);
+  label('composerMaxHeightValue').textContent = settings.composerMaxHeight === 0 ? t('heightNative') : `${settings.composerMaxHeight} px`;
   input('fontSize').value = String(settings.fontSize);
   label('fontSizeValue').textContent = `${settings.fontSize} px`;
   input('textWidth').value = String(settings.textWidth);
@@ -54,6 +58,8 @@ function paintPage(report: PageReport | undefined): void {
   if (document.getElementById('conversationWidthValue')) {
     label('conversationWidthValue').textContent = widthText(settings.conversationWidth);
     label('composerWidthValue').textContent = widthText(settings.composerWidth);
+    label('composerMinHeightValue').textContent = settings.composerMinHeight === 0 ? t('heightNative') : `${settings.composerMinHeight} px`;
+    label('composerMaxHeightValue').textContent = settings.composerMaxHeight === 0 ? t('heightNative') : `${settings.composerMaxHeight} px`;
   }
 }
 function update(next: Settings): void {
@@ -66,7 +72,7 @@ function update(next: Settings): void {
     label('status').textContent = t('statusSaved');
   }).catch(() => { label('status').textContent = t('statusError'); });
 }
-for (const field of ['conversationWidth','composerWidth','fontSize','textWidth','lineHeight','paragraphGap','codeFontSize','codeLineHeight','codeMaxHeight'] as const) {
+for (const field of ['conversationWidth','composerWidth','fontSize','textWidth','lineHeight','paragraphGap','codeFontSize','codeLineHeight','codeMaxHeight','composerMinHeight','composerMaxHeight'] as const) {
   input(field).addEventListener('input', () => update({...settings, [field]: Number(input(field).value), preset:'custom'}));
 }
 for (const field of ['enabled','expandCode','expandTables','expandMedia','breakout','focusLatest','codeWrap'] as const) {
@@ -80,6 +86,7 @@ document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => 
 });
 label('reset').addEventListener('click', () => update({...DEFAULT_SETTINGS}));
 input('fontChoice').addEventListener('change', () => update({...settings, fontChoice: input('fontChoice').value as Settings['fontChoice'], preset: 'custom'}));
+label('composerNative').addEventListener('click', () => update({...settings, composerMinHeight: 0, composerMaxHeight: 0, preset: 'custom'}));
 const session = globalThis.chrome?.storage?.session;
 if (session) {
   session.get(RUNTIME_KEY)

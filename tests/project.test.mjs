@@ -19,7 +19,7 @@ test('manifest limits permissions and origins', () => {
 });
 test('popup ids match controls', () => {
   const html=read('public/popup.html');
-  for(const id of ['enabled','conversationWidth','textWidth','composerWidth','fontSize','lineHeight','paragraphGap','fontChoice','focusLatest','codeFontSize','codeLineHeight','codeMaxHeight','codeWrap','expandCode','expandTables','expandMedia','breakout','reset','status']) {
+  for(const id of ['enabled','conversationWidth','textWidth','composerWidth','composerMinHeight','composerMaxHeight','composerNative','fontSize','lineHeight','paragraphGap','fontChoice','focusLatest','codeFontSize','codeLineHeight','codeMaxHeight','codeWrap','expandCode','expandTables','expandMedia','breakout','reset','status']) {
     assert.ok(html.includes(`id="${id}"`), `Missing ${id}`);
   }
 });
@@ -157,6 +157,14 @@ test('tables scroll inside themselves and images are a separate switch', async (
   assert.match(css, /position: sticky/);
   assert.match(css, /data-layout-plus-media/);
   assert.ok(!css.includes('innerText'));
+});
+
+test('composer height can return to native without a full reset', async () => {
+  const {normalizeSettings, PRESETS} = await loadSource('../src/settings.ts');
+  assert.equal(PRESETS.developer.composerMinHeight, 120);
+  assert.equal(PRESETS.reading.composerMaxHeight, 160);
+  assert.equal(normalizeSettings({composerMinHeight: 0, composerMaxHeight: 0}).composerMinHeight, 0);
+  assert.match(read('src/content.ts'), /data-chatgpt-composer/);
 });
 
 test('CSS has balanced braces', () => {

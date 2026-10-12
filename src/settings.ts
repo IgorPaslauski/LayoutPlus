@@ -7,6 +7,8 @@ export interface Settings {
   conversationWidth: number;
   textWidth: number;
   composerWidth: number;
+  composerMinHeight: number;
+  composerMaxHeight: number;
   fontSize: number;
   lineHeight: number;
   paragraphGap: number;
@@ -27,6 +29,8 @@ export const DEFAULT_SETTINGS: Settings = {
   conversationWidth: 1200,
   textWidth: 72,
   composerWidth: 1000,
+  composerMinHeight: 0,
+  composerMaxHeight: 0,
   fontSize: 16,
   lineHeight: 16,
   paragraphGap: 12,
@@ -41,14 +45,15 @@ export const DEFAULT_SETTINGS: Settings = {
   expandMedia: true,
   breakout: false
 };
-type PresetFields = Pick<Settings, 'conversationWidth'|'textWidth'|'composerWidth'|'fontSize'|'lineHeight'|'paragraphGap'|'fontChoice'|'focusLatest'|'codeFontSize'|'codeLineHeight'|'codeWrap'|'codeMaxHeight'|'expandCode'|'expandTables'|'expandMedia'|'breakout'>;
+type PresetFields = Pick<Settings, 'conversationWidth'|'textWidth'|'composerWidth'|'composerMinHeight'|'composerMaxHeight'|'fontSize'|'lineHeight'|'paragraphGap'|'fontChoice'|'focusLatest'|'codeFontSize'|'codeLineHeight'|'codeWrap'|'codeMaxHeight'|'expandCode'|'expandTables'|'expandMedia'|'breakout'>;
 const comfortable = {lineHeight: 16, paragraphGap: 12, fontChoice: 'system' as const, focusLatest: false};
 const codeDefaults = {codeFontSize: 13, codeLineHeight: 15, codeWrap: false, codeMaxHeight: 0};
+const heights = {composerMinHeight: 0, composerMaxHeight: 0};
 export const PRESETS: Record<Exclude<Preset, 'custom'>, PresetFields> = {
-  default: {conversationWidth: 768, textWidth: 68, composerWidth: 768, fontSize: 16, expandCode: false, expandTables: false, expandMedia: false, breakout: false, ...comfortable, ...codeDefaults},
-  wide: {conversationWidth: 1200, textWidth: 72, composerWidth: 1000, fontSize: 16, expandCode: true, expandTables: true, expandMedia: true, breakout: false, ...comfortable, ...codeDefaults},
-  developer: {conversationWidth: 1600, textWidth: 72, composerWidth: 1300, fontSize: 15, expandCode: true, expandTables: true, expandMedia: true, breakout: true, ...comfortable, lineHeight: 15, ...codeDefaults, codeFontSize: 14, codeLineHeight: 16, codeMaxHeight: 480},
-  reading: {conversationWidth: 840, textWidth: 66, composerWidth: 720, fontSize: 18, lineHeight: 17, paragraphGap: 16, fontChoice: 'serif', focusLatest: true, expandCode: false, expandTables: false, expandMedia: false, breakout: false, ...codeDefaults}
+  default: {conversationWidth: 768, textWidth: 68, composerWidth: 768, fontSize: 16, expandCode: false, expandTables: false, expandMedia: false, breakout: false, ...comfortable, ...codeDefaults, ...heights},
+  wide: {conversationWidth: 1200, textWidth: 72, composerWidth: 1000, fontSize: 16, expandCode: true, expandTables: true, expandMedia: true, breakout: false, ...comfortable, ...codeDefaults, ...heights},
+  developer: {conversationWidth: 1600, textWidth: 72, composerWidth: 1300, fontSize: 15, expandCode: true, expandTables: true, expandMedia: true, breakout: true, ...comfortable, lineHeight: 15, ...codeDefaults, codeFontSize: 14, codeLineHeight: 16, codeMaxHeight: 480, ...heights, composerMinHeight: 120, composerMaxHeight: 320},
+  reading: {conversationWidth: 840, textWidth: 66, composerWidth: 720, fontSize: 18, lineHeight: 17, paragraphGap: 16, fontChoice: 'serif', focusLatest: true, expandCode: false, expandTables: false, expandMedia: false, breakout: false, ...codeDefaults, ...heights, composerMaxHeight: 160}
 };
 const FONTS: FontChoice[] = ['system', 'serif', 'readable'];
 const clamp = (value: unknown, min: number, max: number, fallback: number) =>
@@ -66,6 +71,8 @@ export function normalizeSettings(input: unknown): Settings {
     conversationWidth: clamp(value.conversationWidth, 480, 2000, DEFAULT_SETTINGS.conversationWidth),
     textWidth: clamp(value.textWidth, 50, 85, DEFAULT_SETTINGS.textWidth),
     composerWidth: clamp(value.composerWidth, 480, 2000, DEFAULT_SETTINGS.composerWidth),
+    composerMinHeight: clamp(value.composerMinHeight, 0, 320, DEFAULT_SETTINGS.composerMinHeight),
+    composerMaxHeight: clamp(value.composerMaxHeight, 0, 480, DEFAULT_SETTINGS.composerMaxHeight),
     fontSize: clamp(value.fontSize, 12, 22, DEFAULT_SETTINGS.fontSize),
     lineHeight: clamp(value.lineHeight, 14, 20, DEFAULT_SETTINGS.lineHeight),
     paragraphGap: clamp(value.paragraphGap, 8, 28, DEFAULT_SETTINGS.paragraphGap),
