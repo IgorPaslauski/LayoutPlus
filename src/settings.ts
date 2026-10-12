@@ -2,6 +2,10 @@ export const SETTINGS_KEY = 'layoutPlusSettings';
 export type ReturnPreset = 'default' | 'wide' | 'developer' | 'reading';
 export type Preset = ReturnPreset | 'presentation' | 'custom';
 export type FontChoice = 'system' | 'serif' | 'readable';
+export interface NamedPreset {
+  name: string;
+  layout: PresetFields;
+}
 export interface Settings {
   enabled: boolean;
   preset: Preset;
@@ -26,6 +30,8 @@ export interface Settings {
   breakout: boolean;
   sidebarAdjust: boolean;
   sidebarWidth: number;
+  namedPresets: NamedPreset[];
+  activeNamed: number;
 }
 export const DEFAULT_SETTINGS: Settings = {
   enabled: true,
@@ -50,7 +56,9 @@ export const DEFAULT_SETTINGS: Settings = {
   expandMedia: true,
   breakout: false,
   sidebarAdjust: false,
-  sidebarWidth: 240
+  sidebarWidth: 240,
+  namedPresets: [],
+  activeNamed: -1
 };
 type PresetFields = Pick<Settings, 'conversationWidth'|'textWidth'|'composerWidth'|'composerMinHeight'|'composerMaxHeight'|'fontSize'|'lineHeight'|'paragraphGap'|'fontChoice'|'focusLatest'|'codeFontSize'|'codeLineHeight'|'codeWrap'|'codeMaxHeight'|'expandCode'|'expandTables'|'expandMedia'|'breakout'|'sidebarAdjust'|'sidebarWidth'>;
 const comfortable = {lineHeight: 16, paragraphGap: 12, fontChoice: 'system' as const, focusLatest: false};
@@ -100,14 +108,64 @@ export function normalizeSettings(input: unknown): Settings {
     expandMedia: typeof value.expandMedia === 'boolean' ? value.expandMedia : DEFAULT_SETTINGS.expandMedia,
     breakout: typeof value.breakout === 'boolean' ? value.breakout : DEFAULT_SETTINGS.breakout,
     sidebarAdjust: typeof value.sidebarAdjust === 'boolean' ? value.sidebarAdjust : DEFAULT_SETTINGS.sidebarAdjust,
-    sidebarWidth: clamp(value.sidebarWidth, 0, 280, DEFAULT_SETTINGS.sidebarWidth)
+    sidebarWidth: clamp(value.sidebarWidth, 0, 280, DEFAULT_SETTINGS.sidebarWidth),
+    namedPresets: normalizeNamed(value.namedPresets),
+    activeNamed: clamp(value.activeNamed, -1, 3, -1)
   };
+}
+const NAMED_LIMIT = 4;
+export function cleanName(value: unknown): string {
+  if (typeof value !== 'string') return '';
+  return value.replace(/[\u0000-\u001f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 24);
+}
+export function layoutSnapshot(settings: Settings): PresetFields {
+  const {enabled: _enabled, preset: _preset, previousPreset: _previous, namedPresets: _named, activeNamed: _active, ...layout} = settings;
+  return layout;
+}
+function normalizeNamed(value: unknown): NamedPreset[] {
+  if (!Array.isArray(value)) return [];
+  const next: NamedPreset[] = [];
+  for (const item of value) {
+    if (!item || typeof item !== 'object' || next.length >= NAMED_LIMIT) continue;
+    const record = item as {name?: unknown; layout?: unknown};
+    const name = cleanName(record.name);
+    if (!name) continue;
+    const layout = layoutSnapshot(normalizeSettings({...(record.layout as object), namedPresets: [], activeNamed: -1}));
+    next.push({name, layout});
+  }
+  return next;
+}
+export function saveNamed(settings: Settings, rawName: string): Settings | null {
+  const name = cleanName(rawName);
+  if (!name) return null;
+  const existing = settings.namedPresets.findIndex(item => item.name.toLowerCase() === name.toLowerCase());
+  if (existing < 0 && settings.namedPresets.length >= NAMED_LIMIT) return null;
+  const next = settings.namedPresets.slice();
+  const saved = {name, layout: layoutSnapshot(settings)};
+  if (existing >= 0) next[existing] = saved;
+  else next.push(saved);
+  return {...settings, preset: 'custom', namedPresets: next, activeNamed: existing >= 0 ? existing : next.length - 1};
+}
+export function deleteNamed(settings: Settings, index: number): Settings {
+  const namedPresets = settings.namedPresets.filter((_, item) => item !== index);
+  let activeNamed = settings.activeNamed;
+  if (activeNamed === index) activeNamed = -1;
+  else if (activeNamed > index) activeNamed -= 1;
+  return {...settings, namedPresets, activeNamed};
+}
+export function applyNamed(settings: Settings, index: number): Settings {
+  const item = settings.namedPresets[index];
+  if (!item) return settings;
+  return normalizeSettings({...settings, ...item.layout, preset: 'custom', activeNamed: index, namedPresets: settings.namedPresets});
+}
+export function exportPayload(settings: Settings): {layoutPlus: 1; presets: NamedPreset[]} {
+  return {layoutPlus: 1, presets: settings.namedPresets};
 }
 export function applyPreset(settings: Settings, preset: Exclude<Preset, 'custom'>): Settings {
   const previousPreset = preset === 'presentation' && settings.preset !== 'presentation' && RETURN_PRESETS.includes(settings.preset as ReturnPreset)
     ? settings.preset as ReturnPreset
     : settings.previousPreset;
-  return { ...settings, preset, previousPreset, ...PRESETS[preset] };
+  return { ...settings, preset, previousPreset, activeNamed: -1, ...PRESETS[preset] };
 }
 export function togglePresentation(settings: Settings): Settings {
   if (settings.preset === 'presentation') return applyPreset(settings, settings.previousPreset);
