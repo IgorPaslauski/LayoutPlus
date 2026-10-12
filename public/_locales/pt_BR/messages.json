@@ -67,6 +67,10 @@
     "message": "Tabelas na largura toda",
     "description": "Interruptor de tabelas largas."
   },
+  "expandMedia": {
+    "message": "Imagens na largura toda",
+    "description": "Interruptor de imagens e diagramas."
+  },
   "breakout": {
     "message": "Blocos saem da coluna",
     "description": "Código, tabelas e imagens podem escapar da coluna de leitura."

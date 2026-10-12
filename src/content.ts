@@ -90,9 +90,41 @@ const CSS = `
     overflow-x: auto;
   }
   html[data-layout-plus="on"][data-layout-plus-tables="on"]
-  [data-markdown-text-style="assistant-message"] :is(table, img) {
+  [data-markdown-text-style="assistant-message"] table {
+    display: block;
     width: 100%;
     max-width: 100%;
+    margin-inline: 0;
+    overflow-x: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  html[data-layout-plus="on"][data-layout-plus-tables="on"]
+  [data-markdown-text-style="assistant-message"] thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: Canvas;
+  }
+  html[data-layout-plus="on"][data-layout-plus-tables="on"]
+  [data-markdown-text-style="assistant-message"] :is(td, th):first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: Canvas;
+  }
+  html[data-layout-plus="on"][data-layout-plus-tables="on"]
+  [data-markdown-text-style="assistant-message"] thead th:first-child {
+    z-index: 3;
+  }
+  html[data-layout-plus="on"][data-layout-plus-tables="on"]
+  [data-markdown-text-style="assistant-message"] tbody tr:nth-child(even) :is(td, th) {
+    background: color-mix(in srgb, CanvasText 6%, Canvas);
+  }
+  html[data-layout-plus="on"][data-layout-plus-media="on"]
+  [data-markdown-text-style="assistant-message"] :is(img, video, svg) {
+    max-width: 100%;
+    height: auto;
     margin-inline: 0;
   }
   html[data-layout-plus="on"][data-layout-plus-breakout="on"]
@@ -139,6 +171,7 @@ function render(settings: Settings): void {
   root.setAttribute(ROOT_ATTRIBUTE, settings.enabled ? 'on' : 'off');
   root.setAttribute('data-layout-plus-code', settings.expandCode ? 'on' : 'off');
   root.setAttribute('data-layout-plus-tables', settings.expandTables ? 'on' : 'off');
+  root.setAttribute('data-layout-plus-media', settings.expandMedia ? 'on' : 'off');
   root.setAttribute('data-layout-plus-breakout', breakoutState(settings));
   root.style.setProperty('--layout-plus-conversation', `${appliedWidth(settings.conversationWidth, window.innerWidth)}px`);
   root.style.setProperty('--layout-plus-text', `${settings.textWidth}ch`);

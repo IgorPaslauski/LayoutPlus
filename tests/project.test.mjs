@@ -19,7 +19,7 @@ test('manifest limits permissions and origins', () => {
 });
 test('popup ids match controls', () => {
   const html=read('public/popup.html');
-  for(const id of ['enabled','conversationWidth','textWidth','composerWidth','fontSize','lineHeight','paragraphGap','fontChoice','focusLatest','codeFontSize','codeLineHeight','codeMaxHeight','codeWrap','expandCode','expandTables','breakout','reset','status']) {
+  for(const id of ['enabled','conversationWidth','textWidth','composerWidth','fontSize','lineHeight','paragraphGap','fontChoice','focusLatest','codeFontSize','codeLineHeight','codeMaxHeight','codeWrap','expandCode','expandTables','expandMedia','breakout','reset','status']) {
     assert.ok(html.includes(`id="${id}"`), `Missing ${id}`);
   }
 });
@@ -146,6 +146,17 @@ test('code preset sets its own type and a height cap', async () => {
   assert.equal(normalizeSettings({codeMaxHeight: 0}).codeMaxHeight, 0);
   assert.match(read('src/content.ts'), /--layout-plus-code-font/);
   assert.ok(!read('src/content.ts').includes('counter-increment'));
+});
+
+test('tables scroll inside themselves and images are a separate switch', async () => {
+  const {PRESETS} = await loadSource('../src/settings.ts');
+  assert.equal(PRESETS.wide.expandMedia, true);
+  assert.equal(PRESETS.reading.expandMedia, false);
+  const css = read('src/content.ts');
+  assert.match(css, /overflow-x: auto/);
+  assert.match(css, /position: sticky/);
+  assert.match(css, /data-layout-plus-media/);
+  assert.ok(!css.includes('innerText'));
 });
 
 test('CSS has balanced braces', () => {

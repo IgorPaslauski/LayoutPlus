@@ -18,6 +18,7 @@ export interface Settings {
   codeMaxHeight: number;
   expandCode: boolean;
   expandTables: boolean;
+  expandMedia: boolean;
   breakout: boolean;
 }
 export const DEFAULT_SETTINGS: Settings = {
@@ -37,16 +38,17 @@ export const DEFAULT_SETTINGS: Settings = {
   codeMaxHeight: 0,
   expandCode: true,
   expandTables: true,
+  expandMedia: true,
   breakout: false
 };
-type PresetFields = Pick<Settings, 'conversationWidth'|'textWidth'|'composerWidth'|'fontSize'|'lineHeight'|'paragraphGap'|'fontChoice'|'focusLatest'|'codeFontSize'|'codeLineHeight'|'codeWrap'|'codeMaxHeight'|'expandCode'|'expandTables'|'breakout'>;
+type PresetFields = Pick<Settings, 'conversationWidth'|'textWidth'|'composerWidth'|'fontSize'|'lineHeight'|'paragraphGap'|'fontChoice'|'focusLatest'|'codeFontSize'|'codeLineHeight'|'codeWrap'|'codeMaxHeight'|'expandCode'|'expandTables'|'expandMedia'|'breakout'>;
 const comfortable = {lineHeight: 16, paragraphGap: 12, fontChoice: 'system' as const, focusLatest: false};
 const codeDefaults = {codeFontSize: 13, codeLineHeight: 15, codeWrap: false, codeMaxHeight: 0};
 export const PRESETS: Record<Exclude<Preset, 'custom'>, PresetFields> = {
-  default: {conversationWidth: 768, textWidth: 68, composerWidth: 768, fontSize: 16, expandCode: false, expandTables: false, breakout: false, ...comfortable, ...codeDefaults},
-  wide: {conversationWidth: 1200, textWidth: 72, composerWidth: 1000, fontSize: 16, expandCode: true, expandTables: true, breakout: false, ...comfortable, ...codeDefaults},
-  developer: {conversationWidth: 1600, textWidth: 72, composerWidth: 1300, fontSize: 15, expandCode: true, expandTables: true, breakout: true, ...comfortable, lineHeight: 15, ...codeDefaults, codeFontSize: 14, codeLineHeight: 16, codeMaxHeight: 480},
-  reading: {conversationWidth: 840, textWidth: 66, composerWidth: 720, fontSize: 18, lineHeight: 17, paragraphGap: 16, fontChoice: 'serif', focusLatest: true, expandCode: false, expandTables: false, breakout: false, ...codeDefaults}
+  default: {conversationWidth: 768, textWidth: 68, composerWidth: 768, fontSize: 16, expandCode: false, expandTables: false, expandMedia: false, breakout: false, ...comfortable, ...codeDefaults},
+  wide: {conversationWidth: 1200, textWidth: 72, composerWidth: 1000, fontSize: 16, expandCode: true, expandTables: true, expandMedia: true, breakout: false, ...comfortable, ...codeDefaults},
+  developer: {conversationWidth: 1600, textWidth: 72, composerWidth: 1300, fontSize: 15, expandCode: true, expandTables: true, expandMedia: true, breakout: true, ...comfortable, lineHeight: 15, ...codeDefaults, codeFontSize: 14, codeLineHeight: 16, codeMaxHeight: 480},
+  reading: {conversationWidth: 840, textWidth: 66, composerWidth: 720, fontSize: 18, lineHeight: 17, paragraphGap: 16, fontChoice: 'serif', focusLatest: true, expandCode: false, expandTables: false, expandMedia: false, breakout: false, ...codeDefaults}
 };
 const FONTS: FontChoice[] = ['system', 'serif', 'readable'];
 const clamp = (value: unknown, min: number, max: number, fallback: number) =>
@@ -75,6 +77,7 @@ export function normalizeSettings(input: unknown): Settings {
     codeMaxHeight: codeMaxHeight(value.codeMaxHeight),
     expandCode: typeof value.expandCode === 'boolean' ? value.expandCode : DEFAULT_SETTINGS.expandCode,
     expandTables: typeof value.expandTables === 'boolean' ? value.expandTables : DEFAULT_SETTINGS.expandTables,
+    expandMedia: typeof value.expandMedia === 'boolean' ? value.expandMedia : DEFAULT_SETTINGS.expandMedia,
     breakout: typeof value.breakout === 'boolean' ? value.breakout : DEFAULT_SETTINGS.breakout
   };
 }

@@ -37,6 +37,7 @@ function paint(): void {
   input('codeWrap').checked = settings.codeWrap;
   input('expandCode').checked = settings.expandCode;
   input('expandTables').checked = settings.expandTables;
+  input('expandMedia').checked = settings.expandMedia;
   input('breakout').checked = settings.breakout;
   document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => {
     button.classList.toggle('active', button.dataset.preset === settings.preset);
@@ -68,7 +69,7 @@ function update(next: Settings): void {
 for (const field of ['conversationWidth','composerWidth','fontSize','textWidth','lineHeight','paragraphGap','codeFontSize','codeLineHeight','codeMaxHeight'] as const) {
   input(field).addEventListener('input', () => update({...settings, [field]: Number(input(field).value), preset:'custom'}));
 }
-for (const field of ['enabled','expandCode','expandTables','breakout','focusLatest','codeWrap'] as const) {
+for (const field of ['enabled','expandCode','expandTables','expandMedia','breakout','focusLatest','codeWrap'] as const) {
   input(field).addEventListener('change', () => update({...settings, [field]: input(field).checked, ...(field === 'enabled' ? {} : {preset:'custom' as const})}));
 }
 document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => {
