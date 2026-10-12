@@ -19,7 +19,7 @@ test('manifest limits permissions and origins', () => {
 });
 test('popup ids match controls', () => {
   const html=read('public/popup.html');
-  for(const id of ['enabled','conversationWidth','composerWidth','fontSize','expandCode','expandTables','reset','status']) {
+  for(const id of ['enabled','conversationWidth','textWidth','composerWidth','fontSize','expandCode','expandTables','reset','status']) {
     assert.ok(html.includes(`id="${id}"`), `Missing ${id}`);
   }
 });
@@ -88,6 +88,19 @@ test('saved width is capped to the current window', async () => {
   assert.equal(appliedWidth(1600, 700), 700);
   assert.match(read('src/content.ts'), /appliedWidth\(/);
   assert.ok(!read('src/content.ts').includes('storage.local'));
+});
+
+test('reading column stays narrower than code and tables', async () => {
+  const {normalizeSettings, PRESETS, DEFAULT_SETTINGS} = await loadSource('../src/settings.ts');
+  const developer = normalizeSettings({preset: 'developer', ...PRESETS.developer, enabled: true});
+  assert.ok(developer.textWidth >= 50 && developer.textWidth <= 80);
+  assert.ok(developer.conversationWidth >= 1400);
+  assert.equal(developer.expandCode, true);
+  assert.equal(developer.expandTables, true);
+  const legacy = normalizeSettings({conversationWidth: 1600, fontSize: 16, enabled: true, preset: 'custom', expandCode: true, expandTables: true});
+  assert.equal(legacy.textWidth, DEFAULT_SETTINGS.textWidth);
+  assert.match(read('src/content.ts'), /--layout-plus-text/);
+  assert.match(read('src/content.ts'), /assistant-message"\] > \*/);
 });
 
 test('CSS has balanced braces', () => {

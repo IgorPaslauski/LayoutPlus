@@ -44,15 +44,23 @@ const CSS = `
   html[data-layout-plus="on"] [data-markdown-text-style="assistant-message"] {
     font-size: var(--layout-plus-font);
   }
+  html[data-layout-plus="on"] [data-markdown-text-style="assistant-message"] > * {
+    max-width: var(--layout-plus-text);
+    margin-inline: auto;
+  }
 
   html[data-layout-plus="on"][data-layout-plus-code="on"]
   [data-markdown-text-style="assistant-message"] pre {
     max-width: 100%;
+    width: 100%;
+    margin-inline: 0;
     overflow-x: auto;
   }
   html[data-layout-plus="on"][data-layout-plus-tables="on"]
-  [data-markdown-text-style="assistant-message"] table {
+  [data-markdown-text-style="assistant-message"] :is(table, img) {
     width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
   }
 
   @media (max-width: 768px) {
@@ -74,6 +82,7 @@ function render(settings: Settings): void {
   root.setAttribute('data-layout-plus-code', settings.expandCode ? 'on' : 'off');
   root.setAttribute('data-layout-plus-tables', settings.expandTables ? 'on' : 'off');
   root.style.setProperty('--layout-plus-conversation', `${appliedWidth(settings.conversationWidth, window.innerWidth)}px`);
+  root.style.setProperty('--layout-plus-text', `${settings.textWidth}ch`);
   root.style.setProperty('--layout-plus-composer', `${appliedWidth(settings.composerWidth, window.innerWidth)}px`);
   root.style.setProperty('--layout-plus-font', `${settings.fontSize}px`);
   let style = document.getElementById(STYLE_ID) as HTMLStyleElement | null;

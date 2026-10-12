@@ -51,6 +51,10 @@
     "message": "Texto",
     "description": "Controle do tamanho do texto."
   },
+  "textWidth": {
+    "message": "Coluna",
+    "description": "Largura da coluna de leitura em caracteres."
+  },
   "expandCode": {
     "message": "Código na largura toda",
     "description": "Interruptor de código largo."
