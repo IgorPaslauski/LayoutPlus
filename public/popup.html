@@ -22,6 +22,7 @@
       <button type="button" data-preset="default" data-i18n="presetDefault">Default</button>
       <button type="button" data-preset="wide" data-i18n="presetWide">Wide</button>
       <button type="button" data-preset="developer" data-i18n="presetDeveloper">Code</button>
+      <button type="button" data-preset="reading" data-i18n="presetReading">Read</button>
     </div>
     <p id="presetNote" class="note" data-i18n="presetCustom" hidden>Manual adjustment</p>
     <p id="pageNote" class="note warn" data-i18n="pageMissing" hidden>The layout could not find this page</p>
@@ -55,6 +56,28 @@
         </div>
         <input id="fontSize" type="range" min="12" max="22" step="1">
       </div>
+      <div class="control">
+        <div class="control-top">
+          <label for="lineHeight" data-i18n="lineHeight">Line spacing</label>
+          <output id="lineHeightValue"></output>
+        </div>
+        <input id="lineHeight" type="range" min="14" max="20" step="1">
+      </div>
+      <div class="control">
+        <div class="control-top">
+          <label for="paragraphGap" data-i18n="paragraphGap">Paragraph gap</label>
+          <output id="paragraphGapValue"></output>
+        </div>
+        <input id="paragraphGap" type="range" min="8" max="28" step="1">
+      </div>
+      <div class="control">
+        <label for="fontChoice" data-i18n="fontChoice">Font</label>
+        <select id="fontChoice">
+          <option value="system" data-i18n="fontSystem">System</option>
+          <option value="serif" data-i18n="fontSerif">Serif</option>
+          <option value="readable" data-i18n="fontReadable">Readable</option>
+        </select>
+      </div>
     </div>
 
     <div class="checks">
@@ -69,6 +92,10 @@
       <label class="check">
         <input id="breakout" type="checkbox">
         <span data-i18n="breakout">Let blocks leave the column</span>
+      </label>
+      <label class="check">
+        <input id="focusLatest" type="checkbox">
+        <span data-i18n="focusLatest">Dim earlier replies</span>
       </label>
     </div>
 

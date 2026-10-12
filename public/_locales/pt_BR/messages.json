@@ -31,6 +31,10 @@
     "message": "Código",
     "description": "Botão da predefinição de código."
   },
+  "presetReading": {
+    "message": "Leitura",
+    "description": "Botão da predefinição de leitura."
+  },
   "presetCustom": {
     "message": "Ajuste manual",
     "description": "Aviso quando os valores não batem com uma predefinição."
@@ -66,6 +70,34 @@
   "breakout": {
     "message": "Blocos saem da coluna",
     "description": "Código, tabelas e imagens podem escapar da coluna de leitura."
+  },
+  "lineHeight": {
+    "message": "Entrelinha",
+    "description": "Controle de entrelinha."
+  },
+  "paragraphGap": {
+    "message": "Espaço do parágrafo",
+    "description": "Espaço entre parágrafos."
+  },
+  "fontChoice": {
+    "message": "Fonte",
+    "description": "Escolha da família tipográfica."
+  },
+  "fontSystem": {
+    "message": "Sistema",
+    "description": "Mantém a fonte da página."
+  },
+  "fontSerif": {
+    "message": "Serifada",
+    "description": "Fonte serifada do sistema."
+  },
+  "fontReadable": {
+    "message": "Leitura",
+    "description": "Fonte sem serifa do sistema, com formas mais abertas."
+  },
+  "focusLatest": {
+    "message": "Atenuar respostas anteriores",
+    "description": "Esmaece mensagens antigas pela posição no DOM."
   },
   "reset": {
     "message": "Restaurar",

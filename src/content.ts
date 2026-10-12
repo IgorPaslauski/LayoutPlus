@@ -44,6 +44,26 @@ const CSS = `
 
   html[data-layout-plus="on"] [data-markdown-text-style="assistant-message"] {
     font-size: var(--layout-plus-font);
+    line-height: var(--layout-plus-line);
+  }
+  html[data-layout-plus="on"] [data-markdown-text-style="assistant-message"] p {
+    margin-block: var(--layout-plus-paragraph);
+  }
+  html[data-layout-plus-font="serif"] [data-markdown-text-style="assistant-message"] {
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+  }
+  html[data-layout-plus-font="readable"] [data-markdown-text-style="assistant-message"] {
+    font-family: Verdana, "Segoe UI", "Trebuchet MS", sans-serif;
+  }
+  html[data-layout-plus-focus="on"] [data-layout-plus-earlier] {
+    opacity: 0.45;
+    max-height: 8lh;
+    overflow: hidden;
+  }
+  html[data-layout-plus-focus="on"] [data-layout-plus-earlier]:hover {
+    opacity: 1;
+    max-height: none;
+    overflow: visible;
   }
   html[data-layout-plus="on"] [data-markdown-text-style="assistant-message"] > * {
     max-width: var(--layout-plus-text);
@@ -111,7 +131,11 @@ function render(settings: Settings): void {
   root.style.setProperty('--layout-plus-conversation', `${appliedWidth(settings.conversationWidth, window.innerWidth)}px`);
   root.style.setProperty('--layout-plus-text', `${settings.textWidth}ch`);
   root.style.setProperty('--layout-plus-composer', `${appliedWidth(settings.composerWidth, window.innerWidth)}px`);
+  root.setAttribute('data-layout-plus-font', settings.fontChoice);
+  root.setAttribute('data-layout-plus-focus', settings.enabled && settings.focusLatest ? 'on' : 'off');
   root.style.setProperty('--layout-plus-font', `${settings.fontSize}px`);
+  root.style.setProperty('--layout-plus-line', `${settings.lineHeight / 10}`);
+  root.style.setProperty('--layout-plus-paragraph', `${settings.paragraphGap}px`);
   let style = document.getElementById(STYLE_ID) as HTMLStyleElement | null;
   if (!settings.enabled) {
     document.querySelectorAll<HTMLElement>('[data-oai-writing-block-surface] header.sticky').forEach(
@@ -158,12 +182,20 @@ function alignWritingActions(): void {
     header.style.setProperty('--layout-plus-writing-actions-offset', `${offset}px`);
   }
 }
+function markEarlierMessages(focus: boolean): void {
+  const nodes = document.querySelectorAll('[data-message-author-role]');
+  nodes.forEach((node, index) => {
+    if (focus && index < nodes.length - 1) node.setAttribute('data-layout-plus-earlier', '');
+    else node.removeAttribute('data-layout-plus-earlier');
+  });
+}
 function scheduleWritingAlignment(): void {
   if (alignmentPending) return;
   alignmentPending = true;
   requestAnimationFrame(() => {
     alignWritingActions();
     document.documentElement.setAttribute('data-layout-plus-breakout', breakoutState(current));
+    markEarlierMessages(current.enabled && current.focusLatest);
     reportPage();
   });
 }
