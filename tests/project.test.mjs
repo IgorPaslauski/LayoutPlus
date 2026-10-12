@@ -19,7 +19,7 @@ test('manifest limits permissions and origins', () => {
 });
 test('popup ids match controls', () => {
   const html=read('public/popup.html');
-  for(const id of ['enabled','conversationWidth','textWidth','composerWidth','composerMinHeight','composerMaxHeight','composerNative','fontSize','lineHeight','paragraphGap','fontChoice','focusLatest','codeFontSize','codeLineHeight','codeMaxHeight','codeWrap','expandCode','expandTables','expandMedia','breakout','reset','status']) {
+  for(const id of ['enabled','conversationWidth','textWidth','composerWidth','composerMinHeight','composerMaxHeight','composerNative','fontSize','lineHeight','paragraphGap','fontChoice','focusLatest','codeFontSize','codeLineHeight','codeMaxHeight','codeWrap','expandCode','expandTables','expandMedia','breakout','sidebarAdjust','sidebarWidth','reset','status']) {
     assert.ok(html.includes(`id="${id}"`), `Missing ${id}`);
   }
 });
@@ -165,6 +165,16 @@ test('composer height can return to native without a full reset', async () => {
   assert.equal(PRESETS.reading.composerMaxHeight, 160);
   assert.equal(normalizeSettings({composerMinHeight: 0, composerMaxHeight: 0}).composerMinHeight, 0);
   assert.match(read('src/content.ts'), /data-chatgpt-composer/);
+});
+
+test('sidebar width stays off on a narrow window', async () => {
+  const {sidebarMode} = await loadSource('../src/settings.ts');
+  assert.equal(sidebarMode(true, 1400), 'set');
+  assert.equal(sidebarMode(true, 700), 'native');
+  assert.equal(sidebarMode(false, 1400), 'native');
+  const content = read('src/content.ts');
+  assert.match(content, /min-width: 769px/);
+  assert.ok(!content.includes('.click('));
 });
 
 test('CSS has balanced braces', () => {

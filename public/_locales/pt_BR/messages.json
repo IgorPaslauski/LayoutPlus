@@ -139,6 +139,14 @@
     "message": "Quebrar linhas do código",
     "description": "Quebra linhas longas em vez de rolar para o lado."
   },
+  "sidebarAdjust": {
+    "message": "Ajustar barra",
+    "description": "Aplica a largura da barra. Desligado deixa a barra da página."
+  },
+  "sidebarWidth": {
+    "message": "Barra",
+    "description": "Largura da barra. Zero a recolhe."
+  },
   "reset": {
     "message": "Restaurar",
     "description": "Botão de restaurar."

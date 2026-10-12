@@ -22,6 +22,8 @@ export interface Settings {
   expandTables: boolean;
   expandMedia: boolean;
   breakout: boolean;
+  sidebarAdjust: boolean;
+  sidebarWidth: number;
 }
 export const DEFAULT_SETTINGS: Settings = {
   enabled: true,
@@ -43,17 +45,20 @@ export const DEFAULT_SETTINGS: Settings = {
   expandCode: true,
   expandTables: true,
   expandMedia: true,
-  breakout: false
+  breakout: false,
+  sidebarAdjust: false,
+  sidebarWidth: 240
 };
-type PresetFields = Pick<Settings, 'conversationWidth'|'textWidth'|'composerWidth'|'composerMinHeight'|'composerMaxHeight'|'fontSize'|'lineHeight'|'paragraphGap'|'fontChoice'|'focusLatest'|'codeFontSize'|'codeLineHeight'|'codeWrap'|'codeMaxHeight'|'expandCode'|'expandTables'|'expandMedia'|'breakout'>;
+type PresetFields = Pick<Settings, 'conversationWidth'|'textWidth'|'composerWidth'|'composerMinHeight'|'composerMaxHeight'|'fontSize'|'lineHeight'|'paragraphGap'|'fontChoice'|'focusLatest'|'codeFontSize'|'codeLineHeight'|'codeWrap'|'codeMaxHeight'|'expandCode'|'expandTables'|'expandMedia'|'breakout'|'sidebarAdjust'|'sidebarWidth'>;
 const comfortable = {lineHeight: 16, paragraphGap: 12, fontChoice: 'system' as const, focusLatest: false};
 const codeDefaults = {codeFontSize: 13, codeLineHeight: 15, codeWrap: false, codeMaxHeight: 0};
 const heights = {composerMinHeight: 0, composerMaxHeight: 0};
+const sidebar = {sidebarAdjust: false, sidebarWidth: 240};
 export const PRESETS: Record<Exclude<Preset, 'custom'>, PresetFields> = {
-  default: {conversationWidth: 768, textWidth: 68, composerWidth: 768, fontSize: 16, expandCode: false, expandTables: false, expandMedia: false, breakout: false, ...comfortable, ...codeDefaults, ...heights},
-  wide: {conversationWidth: 1200, textWidth: 72, composerWidth: 1000, fontSize: 16, expandCode: true, expandTables: true, expandMedia: true, breakout: false, ...comfortable, ...codeDefaults, ...heights},
-  developer: {conversationWidth: 1600, textWidth: 72, composerWidth: 1300, fontSize: 15, expandCode: true, expandTables: true, expandMedia: true, breakout: true, ...comfortable, lineHeight: 15, ...codeDefaults, codeFontSize: 14, codeLineHeight: 16, codeMaxHeight: 480, ...heights, composerMinHeight: 120, composerMaxHeight: 320},
-  reading: {conversationWidth: 840, textWidth: 66, composerWidth: 720, fontSize: 18, lineHeight: 17, paragraphGap: 16, fontChoice: 'serif', focusLatest: true, expandCode: false, expandTables: false, expandMedia: false, breakout: false, ...codeDefaults, ...heights, composerMaxHeight: 160}
+  default: {conversationWidth: 768, textWidth: 68, composerWidth: 768, fontSize: 16, expandCode: false, expandTables: false, expandMedia: false, breakout: false, ...comfortable, ...codeDefaults, ...heights, ...sidebar},
+  wide: {conversationWidth: 1200, textWidth: 72, composerWidth: 1000, fontSize: 16, expandCode: true, expandTables: true, expandMedia: true, breakout: false, ...comfortable, ...codeDefaults, ...heights, ...sidebar},
+  developer: {conversationWidth: 1600, textWidth: 72, composerWidth: 1300, fontSize: 15, expandCode: true, expandTables: true, expandMedia: true, breakout: true, ...comfortable, lineHeight: 15, ...codeDefaults, codeFontSize: 14, codeLineHeight: 16, codeMaxHeight: 480, ...heights, composerMinHeight: 120, composerMaxHeight: 320, ...sidebar},
+  reading: {conversationWidth: 840, textWidth: 66, composerWidth: 720, fontSize: 18, lineHeight: 17, paragraphGap: 16, fontChoice: 'serif', focusLatest: true, expandCode: false, expandTables: false, expandMedia: false, breakout: false, ...codeDefaults, ...heights, composerMaxHeight: 160, ...sidebar}
 };
 const FONTS: FontChoice[] = ['system', 'serif', 'readable'];
 const clamp = (value: unknown, min: number, max: number, fallback: number) =>
@@ -85,7 +90,9 @@ export function normalizeSettings(input: unknown): Settings {
     expandCode: typeof value.expandCode === 'boolean' ? value.expandCode : DEFAULT_SETTINGS.expandCode,
     expandTables: typeof value.expandTables === 'boolean' ? value.expandTables : DEFAULT_SETTINGS.expandTables,
     expandMedia: typeof value.expandMedia === 'boolean' ? value.expandMedia : DEFAULT_SETTINGS.expandMedia,
-    breakout: typeof value.breakout === 'boolean' ? value.breakout : DEFAULT_SETTINGS.breakout
+    breakout: typeof value.breakout === 'boolean' ? value.breakout : DEFAULT_SETTINGS.breakout,
+    sidebarAdjust: typeof value.sidebarAdjust === 'boolean' ? value.sidebarAdjust : DEFAULT_SETTINGS.sidebarAdjust,
+    sidebarWidth: clamp(value.sidebarWidth, 0, 280, DEFAULT_SETTINGS.sidebarWidth)
   };
 }
 export function applyPreset(settings: Settings, preset: Exclude<Preset, 'custom'>): Settings {
@@ -97,4 +104,9 @@ export function appliedWidth(saved: number, viewport: number): number {
   if (!Number.isFinite(viewport) || viewport <= 0) return saved;
   if (viewport <= 768) return Math.max(1, Math.round(viewport));
   return Math.min(saved, Math.max(320, Math.round(viewport - 32)));
+}
+
+export function sidebarMode(adjust: boolean, viewport: number): 'set' | 'native' {
+  if (!adjust || !Number.isFinite(viewport) || viewport <= 768) return 'native';
+  return 'set';
 }

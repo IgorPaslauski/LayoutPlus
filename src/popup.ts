@@ -43,6 +43,9 @@ function paint(): void {
   input('expandTables').checked = settings.expandTables;
   input('expandMedia').checked = settings.expandMedia;
   input('breakout').checked = settings.breakout;
+  input('sidebarAdjust').checked = settings.sidebarAdjust;
+  input('sidebarWidth').value = String(settings.sidebarWidth);
+  label('sidebarWidthValue').textContent = `${settings.sidebarWidth} px`;
   document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => {
     button.classList.toggle('active', button.dataset.preset === settings.preset);
     button.setAttribute('aria-pressed', String(button.dataset.preset === settings.preset));
@@ -72,10 +75,10 @@ function update(next: Settings): void {
     label('status').textContent = t('statusSaved');
   }).catch(() => { label('status').textContent = t('statusError'); });
 }
-for (const field of ['conversationWidth','composerWidth','fontSize','textWidth','lineHeight','paragraphGap','codeFontSize','codeLineHeight','codeMaxHeight','composerMinHeight','composerMaxHeight'] as const) {
+for (const field of ['conversationWidth','composerWidth','fontSize','textWidth','lineHeight','paragraphGap','codeFontSize','codeLineHeight','codeMaxHeight','composerMinHeight','composerMaxHeight','sidebarWidth'] as const) {
   input(field).addEventListener('input', () => update({...settings, [field]: Number(input(field).value), preset:'custom'}));
 }
-for (const field of ['enabled','expandCode','expandTables','expandMedia','breakout','focusLatest','codeWrap'] as const) {
+for (const field of ['enabled','expandCode','expandTables','expandMedia','breakout','focusLatest','codeWrap','sidebarAdjust'] as const) {
   input(field).addEventListener('change', () => update({...settings, [field]: input(field).checked, ...(field === 'enabled' ? {} : {preset:'custom' as const})}));
 }
 document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach(button => {

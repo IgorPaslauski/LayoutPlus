@@ -34,6 +34,8 @@ export const ENGLISH: Record<string, string> = {
   codeMaxHeight: 'Code block height',
   codeMaxAuto: 'Auto',
   codeWrap: 'Wrap code lines',
+  sidebarAdjust: 'Adjust sidebar',
+  sidebarWidth: 'Sidebar',
   reset: 'Restore',
   statusSaving: 'Saving...',
   statusSaved: 'Saved',

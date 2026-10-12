@@ -139,6 +139,14 @@
     "message": "Wrap code lines",
     "description": "Wrap long code lines instead of scrolling sideways."
   },
+  "sidebarAdjust": {
+    "message": "Adjust sidebar",
+    "description": "Apply the sidebar width. Off leaves the page sidebar alone."
+  },
+  "sidebarWidth": {
+    "message": "Sidebar",
+    "description": "Sidebar width. Zero collapses it."
+  },
   "reset": {
     "message": "Restore",
     "description": "Reset settings button."
